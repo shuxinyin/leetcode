@@ -1,0 +1,123 @@
+#### [视频讲解](https://www.bilibili.com/video/BV1fY411x7pg?p=26)
+
+#### [452. 用最少数量的箭引爆气球](https://leetcode-cn.com/problems/minimum-number-of-arrows-to-burst-balloons/) (medium)
+
+![..._452.用最少数量的箭引爆气球.mov](https://leetcode-cn.com/problems/minimum-number-of-arrows-to-burst-balloons/solution/452-yong-zui-shao-shu-liang-de-jian-yin-10uay/82a8ea2b-bd2a-4ed2-ad1e-1831fab7bdf6)
+
+![ds_163](https://pic.leetcode-cn.com/1637635805-iYAlpr-20211118145803.png)
+
+- 思路：区间按照结尾从小到大排序，循环数组，如果后面一个区间的开始大于前一个区间的结尾 就需要新增一支箭。
+- 复杂度：时间复杂度`O(nlogn)`，排序的复杂度`O(nlogn)`，循环数组的复杂度`O(n)`。空间复杂度`O(logn)`，排序栈空间
+
+js：
+
+* js
+
+```js
+var findMinArrowShots = function (points) {
+    if (!points.length) {
+        return 0;
+    }
+
+    points.sort((a, b) => a[1] - b[1]); //按照区间结尾排序
+    let pos = points[0][1];
+    let ans = 1;
+    for (let balloon of points) {
+        if (balloon[0] > pos) {
+            //如果后面一个区间的开始大于前一个区间的结尾 就需要新增一支箭
+            pos = balloon[1]; //更新pos为新的区间的结尾
+            ans++;
+        }
+    }
+    return ans;
+};
+
+
+```
+
+java：
+
+* java
+
+```java
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+        if (points.length == 0) {
+            return 0;
+        }
+        Arrays.sort(points, new Comparator<int[]>() {
+            public int compare(int[] point1, int[] point2) {
+                if (point1[1] > point2[1]) {
+                    return 1;
+                } else if (point1[1] < point2[1]) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        int pos = points[0][1];
+        int ans = 1;
+        for (int[] balloon: points) {
+            if (balloon[0] > pos) {
+                pos = balloon[1];
+                ++ans;
+            }
+        }
+        return ans;
+    }
+}
+
+```
+
+#### 视频教程（高效学习）:[点击学习](https://xiaochen1024.com/series/6196129fc1553b002e57bef5/6196208ec1553b002e57bef6)
+
+#### 目录：
+
+[1.开篇介绍](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18)
+
+[2.时间空间复杂度](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/619635dcc1553b002e57bf12)
+
+[3.动态规划](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61963bcdc1553b002e57bf13)
+
+[4.贪心](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61963ce5c1553b002e57bf14)
+
+[5.二分查找](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61963e36c1553b002e57bf15)
+
+[6.深度优先&广度优先](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61964050c1553b002e57bf16)
+
+[7.双指针](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/619640cec1553b002e57bf17)
+
+[8.滑动窗口](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61964164c1553b002e57bf18)
+
+[9.位运算](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196420ac1553b002e57bf19)
+
+[10.递归&分治](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61964285c1553b002e57bf1a)
+
+[11剪枝&回溯](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/61964326c1553b002e57bf1b)
+
+[12.堆](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/619643e1c1553b002e57bf1c)
+
+[13.单调栈](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196ce3ac1553b002e57bf1f)
+
+[14.排序算法](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196ced6c1553b002e57bf20)
+
+[15.链表](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196cf7fc1553b002e57bf21)
+
+[16.set&map](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196cfc6c1553b002e57bf22)
+
+[17.栈](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d002c1553b002e57bf23)
+
+[18.队列](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d065c1553b002e57bf24)
+
+[19.数组](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d0f9c1553b002e57bf25)
+
+[20.字符串](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d19cc1553b002e57bf26)
+
+[21.树](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d279c1553b002e57bf27)
+
+[22.字典树](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d2c4c1553b002e57bf28)
+
+[23.并查集](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d34dc1553b002e57bf29)
+
+[24.其他类型题](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18/6196d3adc1553b002e57bf2a)

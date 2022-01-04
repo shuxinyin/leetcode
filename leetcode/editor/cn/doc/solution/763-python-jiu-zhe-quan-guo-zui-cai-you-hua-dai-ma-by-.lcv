@@ -1,0 +1,112 @@
+### 解题思路
+
+按惯例 先赞后看，日薪百万！
+
+其实思路很简单，
+1， 首先看第一个字母，找到它在串里最后的一个位置，记作`last`或`一段的最后位置`。
+2， 在从`0~last`这个范围里，挨个查其他字母，看他们的最后位置是不是比刚才的`last`或`一段的最后位置`大。
+如果没有刚才的`last`或`一段的最后位置`大，无视它继续往后找。
+如果比刚才的大，说明这一段的分隔位置必须往后移动，所以我们把`last`或`一段的最后位置`更新为当前的字母的最后位置。
+3，肯定到有一个时间，这个`last`就更新不了了，那么这个时候这个位置就是我们的分隔位置。
+注意题目要分隔后的长度，我们就用`last - startindex + 1`。
+4，找到一个分割位，更新一下起始位置，同理搜索就行了。
+
+一看就懂！中华文化博大精深，更本不需要注释哈哈哈哈哈哈。
+点个赞吧。
+
+### 正常版代码
+
+* python3
+
+```python3
+class Solution:
+    def partitionLabels(self, S: str) -> List[int]:
+        def findlast(aw, S):
+            for i in range(len(S) - 1, -1, -1):
+                if S[i] == aw:
+                    return i
+
+        def breakpoint(startindex):
+            aw = S[startindex]
+            last = findlast(aw, S)
+
+            j = startindex + 1
+            while j < last:
+                temp = findlast(S[j], S)
+                if temp > last:
+                    last = temp
+                j += 1
+
+            output.append(last - startindex + 1)
+            return last
+
+        output = []
+        startindex = 0
+        while startindex < len(S):
+            startindex = breakpoint(startindex) + 1
+        return output
+```
+
+### 博大精深中文版代码
+
+* python3
+
+```python3
+class Solution:
+    def partitionLabels(self, S: str) -> List[int]:
+        def 找最后(一个字母, S):
+            for 哎 in range(len(S) - 1, -1, -1):
+                if S[哎] == 一个字母:
+                    return 哎
+
+        def 查分隔位(一段的开始位置):
+            一个字母 = S[一段的开始位置]
+            一段的最后位置 = 找最后(一个字母, S)
+
+            杰 = 一段的开始位置 + 1
+            while 杰 < 一段的最后位置:
+                临时 = 找最后(S[杰], S)
+                if 临时 > 一段的最后位置:
+                    一段的最后位置 = 临时
+                杰 += 1
+
+            输出答案.append(一段的最后位置 - 一段的开始位置 + 1)
+            return 一段的最后位置
+
+
+        输出答案 = []
+        一段的开始位置 = 0
+        while 一段的开始位置 < len(S):
+            一段的开始位置 = 查分隔位(一段的开始位置) + 1
+        return 输出答案
+```
+
+### 事后。。。
+
+啊！我没想到还可以用字典。。。我傻了。。。
+思路就是不用每次都搜索位置了。。直接用字典存所有字符的最后位置就好了。
+
+不过我懒得改了！反正C语言里没有字典，嗯嗯，就这吧！咩哈哈哈哈哈哈哈哈哈
+
+附一个全服最强代码解释
+
+* python3
+
+```python3
+class Solution:
+    def partitionLabels(self, S: str) -> List[int]:
+        dic = {s: index for index, s in enumerate(S)}   #存储某个字母对应地最后一个序号
+        num = 0  #直接计数
+        result = []
+        j = dic[S[0]]  #第一个字符的最后位置
+
+        for i in range(len(S)):  #逐个遍历
+            num += 1  #找到一个就加1个长度
+            if dic[S[i]] > j:  #思路一样，如果最后位置比刚才的大，就更新最后位置
+                j = dic[S[i]]
+            if i == j:  #思路一样，形式不同，这里就是找到这一段的结束了，就说明当前位置的index和这个字母在字典里的最后位置应该是相同的。
+                result.append(num)  # 加入result
+                num = 0 # 归0
+        return result
+```
+

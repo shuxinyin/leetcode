@@ -1,0 +1,49 @@
+### 解题思路
+
+这个方法参考了题解区的大神@代码世界，属实感觉不错，记录下来。
+大家可以去参考大神的思路，我仅对代码加上一些自己理解的注释。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public void nextPermutation(int[] nums) {
+        if(nums.length == 0){
+            return;
+        }
+        int len = nums.length;
+        //从后向前遍历
+        for(int i = len-1;i >= 0;i--){
+            //如果i为0，说明数组从后到前是递增（654321）的,没有更大的了
+            //直接重排序变成一个递减的（123456）符合题意
+            if(i == 0){
+                Arrays.sort(nums);
+                return;
+            }else if(nums[i] > nums[i-1]){
+                //一旦出现后一个数字nums[i]比前一个大，说明存在更大的整数
+                //对nums[i]及后面的数组排序，从小到大
+                Arrays.sort(nums,i,len);
+                for(int j = i;i < len;j++){
+                    //由于从i开始后面已经排序
+                    //那么保证获得比nums[i-1]大的数，是[i,...,len-1]中最小的,交换即可
+                    if(nums[j] > nums[i-1]){
+                        swap(nums,j,i-1);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    public void swap(int[] nums,int i,int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
+如果不考虑，Arrays.sort()方法，时间复杂度为O(n^2),空间复杂度为O(1).
+
+感谢阅读，共同进步！

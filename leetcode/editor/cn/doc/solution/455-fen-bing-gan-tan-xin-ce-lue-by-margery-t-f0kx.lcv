@@ -1,0 +1,29 @@
+### 解题思路
+
+利用贪心策略，给饥饿度最低的孩子分分配最小能饱腹的饼干。
+
+### 代码
+
+* python
+
+```python
+class Solution(object):
+    def findContentChildren(self, g, s):
+        """
+        :type g: List[int]
+        :type s: List[int]
+        :rtype: int
+        """
+        g.sort()
+        s.sort()
+        child = 0
+        cookie = 0
+        j=0
+        for i in range(len(s)):
+            if j<len(g):
+                if s[i]>=g[j]:
+                    child+=1
+                    j+=1
+        return child
+```
+

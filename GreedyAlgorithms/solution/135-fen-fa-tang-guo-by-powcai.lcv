@@ -1,0 +1,184 @@
+### 思路:
+
+思路一:
+我们先找从左到右满足最少的糖果，再找从右到左的，最后取两边都满足的值(就是最大值)。
+
+思路二:
+只需扫一遍数组。
+
+如何判断 `i` 位置需要多少糖果，我们需要处理有三种情况:
+
+1. `ratings[i - 1]` == `ratings[i]`，那么我们只需要 `1` 糖果
+
+![1563430973450.png](https://pic.leetcode-cn.com/b8a0cf64abf988bef3da02801e81cf1580a9a18b0e96d6ba6b47b2c5b06f8bae-1563430973450.png)
+
+2. `ratings[i - 1] < ratings[i]`，那么我们只需要比前一个多一块糖果
+
+![1563431091961.png](https://pic.leetcode-cn.com/669cf8f3db923ebaf4aac369f579c2348c245862e7f649260c7c50146aa99dd4-1563431091961.png)
+
+3. `ratings[i - 1] > ratings[i]`，那么我们不知道如何判断了，比如:
+
+![1563431300625.png](https://pic.leetcode-cn.com/ac7842324de8da76899c631dee1c0c84cca355d8a09d218a9be887f1c4306283-1563431300625.png)
+
+但是，如果知道**递减的个数**，我们就能判断最少的糖果了
+
+![1563431573161.png](https://pic.leetcode-cn.com/169784d31f20cca02a4d82c0946ce848ca369d7fd5a5fee5984ea92e96a7c562-1563431573161.png)
+
+所以我们保证，递减序列，是从 `1` 开始加的(方向加)，再举个例子:
+
+![1563431873123.png](https://pic.leetcode-cn.com/0b278240d44a74e0e518bda7749d38b65276b63dce07dbecdf3c0e419db2b80b-1563431873123.png)
+
+如何判读 `?` 的糖果多少，我们发现 `ratings`是`3 - 2` 递减的，递减序列个数 `des_num`为`，我们**反向加**，
+
+有公差为 `1` 的求和公式$首项尾项项数 \frac{(首项 + 尾项) * 项数}{2}$，所以我们先假设 `rating` 在等于 `4` 时候也是满足等差的，所以，有 $\frac{( 1 + des\_num ) * des\_num}{2} = \frac{(1 + 2) * 2}{2}$ 糖果,所以 `ratings` 是 `3 - 2` 对于的糖果说 `2 - 1`
+
+但是还有一种可能, 如下图所示：
+
+![1563436200915.png](https://pic.leetcode-cn.com/a82f697e7be2aff71e3c47201f6cc89968b5a87eaa454d35fb83d6b33835f481-1563436200915.png)
+
+所以
+
+时间复杂度 : $O(n)$
+
+空间复杂度 : $O(1)$
+
+大家在根据代码理解理解，如果还有不明白的，可以提出来!
+
+### 代码:
+
+思路一:
+
+* [-Python]
+
+```Python
+def candy(self, ratings) -> int:
+    n = len(ratings)
+    if n == 0: return 0
+    left_to_right = [1] * n
+    right_to_left = [1] * n
+    # 找从左到右满足条件的
+    for i in range(1, n):
+        if ratings[i] > ratings[i - 1]:
+            # 保证从左到右的最少个数
+            left_to_right[i] = left_to_right[i - 1] + 1
+    # print(left_to_right)
+    # 找从右到左满足条件的(同时要符合从左到右)
+    for i in range(n - 2, -1, -1):
+        if ratings[i] > ratings[i + 1]:
+            # 保证从左到右也满足, 同时也满足从右到左
+            right_to_left[i] = max(left_to_right[i], right_to_left[i + 1] + 1)
+    # print(right_to_left)
+    res = 0
+    # 选这个位置最大值
+    for i in range(n):
+        res += max(left_to_right[i], right_to_left[i])
+    return res
+```
+
+优化思路一:
+
+* [1]
+
+```Python
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        n = len(ratings)
+        if n == 0: return 0
+        candy_nums = [1] * n
+
+        for i in range(1, n):
+            if ratings[i] > ratings[i - 1]:
+                candy_nums[i] = candy_nums[i - 1] + 1
+
+        for i in range(n - 1, 0, -1):
+            if ratings[i - 1] > ratings[i]:
+                candy_nums[i - 1] = max(candy_nums[i - 1], candy_nums[i] + 1)
+        return sum(candy_nums)
+```
+
+* [1]
+
+```Java
+class Solution {
+    public int candy(int[] ratings) {
+        if (ratings == null || ratings.length == 0) return 0;
+        int n = ratings.length;
+        int[] candy_nums = new int[n];
+        Arrays.fill(candy_nums, 1);
+        for (int i = 1; i < n; i++) {
+            if (ratings[i] > ratings[i - 1]) candy_nums[i] = candy_nums[i - 1] + 1;
+        }
+        for (int i = n - 1; i > 0; i--) {
+            if (ratings[i - 1] > ratings[i]) candy_nums[i - 1] = Math.max(candy_nums[i - 1], candy_nums[i] + 1);
+        }
+        int res = 0;
+        for (int i = 0; i < n; i++) res += candy_nums[i];
+        return res;
+    }
+}
+```
+
+思路二:
+
+* [2]
+
+```Python
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        res = 1
+        # 先前值
+        pre = 1
+        # 递减长度
+        des_num = 0
+        for i in range(1, len(ratings)):
+            if ratings[i] >= ratings[i - 1]:
+                if des_num > 0:
+                    # 求和公式
+                    res += ((1 + des_num) * des_num) // 2
+                    # 递减长度比先前值大,所以我们要把先前值补充
+                    if pre <= des_num: res += (des_num - pre + 1)
+                    pre = 1
+                    des_num = 0
+                if ratings[i] == ratings[i - 1]:
+                    pre = 1
+                else:
+                    pre += 1
+                res += pre
+            else:
+                des_num += 1
+        # print(des_num)
+        if des_num > 0:
+            res += ((1 + des_num) * des_num) // 2
+            if pre <= des_num: res += (des_num - pre + 1)
+        return res
+```
+
+* [2]
+
+```Java
+class Solution {
+    public int candy(int[] ratings) {
+        int res = 1;
+        int pre = 1;
+        int des_num = 0;
+        for (int i = 1; i < ratings.length; i++) {
+            if (ratings[i] >= ratings[i - 1]) {
+                if (des_num > 0) {
+                    res += ((1 + des_num) * des_num) / 2;
+                    if (des_num >= pre) res += (des_num - pre + 1);
+                    pre = 1;
+                    des_num = 0;
+                }
+                pre = ratings[i - 1] == ratings[i] ? 1 : pre + 1;
+                res += pre;
+            } else des_num++;
+        }
+        if (des_num > 0) {
+            res += ((1 + des_num) * des_num) / 2;
+            if (des_num >= pre) res += (des_num - pre + 1);
+        }
+        return res;
+    }
+}
+```
+

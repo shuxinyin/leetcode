@@ -1,0 +1,45 @@
+双指针法，额外空间复杂度O(1)
+传统做法为预处理每个位置的左侧最大值和右侧最大值，然后分别计算每个位置可以接的水量。
+但是预处理需要花费两个数组空间。
+这里采用双指针法。初始情况指针位于第一个和倒数第二个元素（从0开始）。
+维护两个变量，记录leftMax和rightMax
+若leftMax < rightMax； 结算左指针Math.max(leftMax-height[left]),同时更新leftMax，左指针右移
+否则结算右指针
+
+* 
+
+```
+class Solution {
+    public int trap(int[] height) {
+        if (height.length < 3) { // 小于3不可能接水
+            return 0;
+        }
+        int res = 0, left = 1, right = height.length - 2, cur; // res记录结果，left和right对应左右指针，cur记录中间变量
+        int leftMax = height[0], rightMax = height[height.length - 1]; // 初始情况左右最大值分别为两端
+        while (left <= right) {
+            if (leftMax <= rightMax) {
+                cur = height[left];
+                if (leftMax < cur) {    // 更新最大值
+                    leftMax = cur;
+                } else {
+                    res += leftMax - cur;   // 当前位置高度小于最大值，可以接水
+                }
+                left++;
+            } else {
+                cur = height[right];
+                if (rightMax < cur) {
+                    rightMax = cur;
+                } else {
+                    res += rightMax - cur;
+                }
+                right--;
+            }
+        }
+        return res;
+    }
+}
+时间复杂度：O(N)
+额外空间复杂度：O(1)
+```
+
+![屏幕截图 2021-12-23 111155.png](https://pic.leetcode-cn.com/1640229124-wYUbid-%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202021-12-23%20111155.png)

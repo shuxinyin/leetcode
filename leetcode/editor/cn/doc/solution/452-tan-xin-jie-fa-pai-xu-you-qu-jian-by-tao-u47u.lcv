@@ -1,0 +1,30 @@
+### 解题思路
+
+**将区间按照右区间升序排列，题目与 435.无重叠区间 的解法非常相似，初始取第一个右区间为第一支箭，设定初始射箭数为1，从第二个区间开始遍历，当区间的左区间小于当前第一支箭时，说明这支箭同样也可以贯穿这个区间的气球，则这支箭还可以继续飞，所以继续遍历下一个区间，当当前区间的左区间大于当前在飞的箭时，则说明当前的这支箭已经不能射穿这个区间的气球了，则取这个区间气球的右区间作为下一支箭，继续射出飞行，用count记录总共射出的箭数，最后返回即可!
+需要注意的是在排序右区间时测试用例的最后一个示例[[-2147483646,-2147483645],[2147483646,2147483647]] 由于右区间的差值非常大，如果排序Arrays.sort(interval,(a,b)->a[1]-b[1])，会造成溢出的情况，所以得用包装类 Integer.compare(a,b)进行排序才能通过**
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int findMinArrowShots(int[][] points) {
+         Arrays.sort(points,(a,b)->Integer.compare(a[1],b[1]));
+         int count=1;
+         int cur=points[0][1];
+         for(int m=1;m<points.length;m++)
+         {
+             if(cur>=points[m][0])
+             continue;
+             else
+             {
+              cur=points[m][1];
+              count++;
+             }
+         }
+         return count;
+    }
+}
+```
+

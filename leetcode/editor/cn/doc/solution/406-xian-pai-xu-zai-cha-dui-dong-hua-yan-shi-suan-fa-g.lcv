@@ -1,0 +1,44 @@
+### 解题思路
+
+题目描述：整数对 `(h, k)` 表示，其中 `h` 是这个人的身高，`k` 是排在这个人前面且身高大于或等于 `h` 的人数。
+
+**渔（套路）：一般这种数对，还涉及排序的，根据第一个元素正向排序，根据第二个元素反向排序，或者根据第一个元素反向排序，根据第二个元素正向排序，往往能够简化解题过程。**
+
+在本题目中，我首先对数对进行排序，按照数对的元素 1 降序排序，按照数对的元素 2 升序排序。原因是，按照元素 1 进行降序排序，对于每个元素，在其之前的元素的个数，就是大于等于他的元素的数量，而按照第二个元素正向排序，我们希望 k 大的尽量在后面，减少插入操作的次数。
+
+<![image.png](https://pic.leetcode-cn.com/1605507691-cNsBDz-image.png),![image.png](https://pic.leetcode-cn.com/1605507724-thDrQv-image.png),![image.png](https://pic.leetcode-cn.com/1605507782-rqZJRC-image.png),![image.png](https://pic.leetcode-cn.com/1605507804-PibNnX-image.png),![image.png](https://pic.leetcode-cn.com/1605507828-objPeT-image.png),![image.png](https://pic.leetcode-cn.com/1605507852-WCTcSX-image.png),![image.png](https://pic.leetcode-cn.com/1605507876-njskmi-image.png),![image.png](https://pic.leetcode-cn.com/1605507921-DhmGDp-image.png),![image.png](https://pic.leetcode-cn.com/1605507946-UraHvN-image.png)>
+
+### 代码：for 循环实现，额外 res 数组空间存储
+
+* []
+
+```Python3
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        res = []
+        people = sorted(people, key = lambda x: (-x[0], x[1]))
+        for p in people:
+            if len(res) <= p[1]:
+                res.append(p)
+            elif len(res) > p[1]:
+                res.insert(p[1], p)
+        return res
+```
+
+### 代码：while 循环实现，原地改变
+
+* []
+
+```Python
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        people = sorted(people, key = lambda x: (-x[0], x[1]))
+        i = 0
+        while i < len(people):
+            if i > people[i][1]:
+                people.insert(people[i][1], people[i])
+                people.pop(i+1)
+            i += 1
+        return people
+```
+
