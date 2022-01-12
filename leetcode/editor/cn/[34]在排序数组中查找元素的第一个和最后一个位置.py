@@ -43,5 +43,38 @@
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
-    def searchRange(self, nums: List[int], target: int) -> List[int]:
+    def searchRange(self, nums, target):
+        '''
+        考虑 target开始和结束位置，
+        其实我们要找的就是数组中「第一个等于 target的位置」（记为leftIdx）
+        和「第一个大于 target的位置减一」（记为rightIdx）。
+        '''
+
+        def lower_bound(nums, target):
+            l, r = 0, len(nums) - 1
+            while l < r:
+                mid = (l + r) // 2
+                if nums[mid] >= target:
+                    r = mid
+                else:
+                    l = mid + 1
+            return l
+
+        def upper_bound(nums, target):
+            l, r = 0, len(nums) - 1
+            while l < r:
+                mid = (l + r) // 2
+                if nums[mid] > target:  # upper bound 寻找的第一个大于target的位置
+                    r = mid
+                else:
+                    l = mid + 1
+            return l
+
+        low_bound = lower_bound(nums, target)
+        up_bound = upper_bound(nums, target) - 1
+        if low_bound == len(nums) or nums[low_bound] != target:
+            return [-1, -1]
+        else:
+            return [low_bound, up_bound]
+
 # leetcode submit region end(Prohibit modification and deletion)

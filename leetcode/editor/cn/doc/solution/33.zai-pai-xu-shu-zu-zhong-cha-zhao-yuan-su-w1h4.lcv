@@ -1,0 +1,226 @@
+## 解题思路
+
+我最容易想到的思路是暴力解法，就是直接遍历数组，找出目标值的开始位置和结束位置，这种方法的时间复杂度为 `O(n)`，显然，没有达到进阶要求的 `O(log n)`，也肯定不能够满足面试官。
+
+#### 二分查找
+
+既然说到查找，那就不得不想到大名鼎鼎的【二分查找】了！
+
+如果不了解二分查找的同学可以看看我之前写的这篇文章  [超详细讲解“二分查找”，你看不懂算我笨！](https://mp.weixin.qq.com/s/zwDTDHbX-DMorSQm9hqxBQ)，非常通俗易懂。
+
+这里再简单介绍一下二分查找，根据二分查找的思想，我们将其数学化，符号和意义如下：
+
+**二分查找**（前提条件：数组有序）
+
+- nums：查找数组
+- t：待查找目标元素
+
+初始化：
+
+- left = 0，左边界
+- right = nums.length -1，右边界
+- mid = （left + right）/ 2，查找的中间位置
+
+查找区间：
+
+- **[left, right]：while(left <= right)**
+
+查找目标元素的位置，无则返回-1
+
+算法方程可表示如下：
+
+![](https://pic.leetcode-cn.com/1641871925-DYgiPG-QQ%E6%88%AA%E5%9B%BE20200217120142.png)
+
+虽然直接运用二分查找不能解决这道题，但是可以对二分查找进行巧妙应用，寻找一个数的开始位置，即一个数的左侧边界，如寻找 [1,2,4,4,5,6] 中，4 的开始位置？也就是寻找 4 的左侧边界。
+
+**寻找左侧边界的二分查找**（前提条件：数组有序）
+
+- nums：查找数组
+- t：待查找目标元素
+
+初始化：
+
+- left = 0，左边界
+- right = nums.length -1，右边界
+- mid = （left + right）/ 2，查找的中间位置
+
+查找区间：
+
+- **[left, right]：while(left <= right)**
+
+查找目标元素的开始位置（左侧边界），无则返回比它大的数的左侧边界
+
+算法方程可表示如下：
+
+![](https://pic.leetcode-cn.com/1641871936-tQddJs-QQ%E6%88%AA%E5%9B%BE20200217120655.png)
+
+可以看出，与二分查找唯一的不同就是注意的地方。**当找到目标元素时，并不是直接返回，而是收紧右侧边界，继续查找，以锁定左侧边界。最后返回左侧边界**。
+
+同理，如寻找 [1,2,4,4,5,6] 中，4 的结束位置？也就是寻找 4 的右侧边界。我们也可以分析出寻找右侧边界的二分查找。
+
+**寻找右侧边界的二分查找**（前提条件：数组有序）
+
+- nums：查找数组
+- t：待查找目标元素
+
+初始化：
+
+- left = 0，左边界
+- right = nums.length -1，右边界
+- mid = （left + right）/ 2，查找的中间位置
+
+查找区间：
+
+- **[left, right]：while(left <= right)**
+
+查找目标元素最后一次出现的位置（右侧边界），无则返回比它小的数的右侧边界
+
+算法方程可表示如下：
+
+![](https://pic.leetcode-cn.com/1641871944-hHTVcC-QQ%E6%88%AA%E5%9B%BE20200217120757.png)
+
+稍微总结一下：
+
+**第一个，最基本的二分查找算法：**
+
+> 因为我们初始化 right = nums.length - 1
+>
+> 所以决定了我们的「搜索区间」是 [left, right]
+>
+> 所以决定了 while (left <= right)
+>
+> 同时也决定了 left = mid+1 和 right = mid-1
+>
+> 因为我们只需找到一个 target 的索引即可
+>
+> 所以当 nums[mid] == target 时可以立即返回
+
+**第二个，寻找左侧边界的二分查找：**
+
+> 因为我们初始化 right = nums.length - 1
+>
+> 所以决定了我们的「搜索区间」是 [left, right]
+>
+> 所以决定了 while (left <= right)
+>
+> 同时也决定了 left = mid+1 和 right = mid-1
+>
+> 因为我们需找到 target 的最左侧索引
+>
+> 所以当 nums[mid] == target 时不要立即返回
+>
+> 而要收紧右侧边界以锁定左侧边界
+
+**第三个，寻找右侧边界的二分查找：**
+
+> 因为我们初始化 right = nums.length - 1
+>
+> 所以决定了我们的「搜索区间」是 [left, right]
+>
+> 所以决定了 while (left <= right)
+>
+> 同时也决定了 left = mid+1 和 right = mid-1
+>
+> 因为我们需找到 target 的最右侧索引
+>
+> 所以当 nums[mid] == target 时不要立即返回
+>
+> 而要收紧左侧边界以锁定右侧边界
+
+弄懂了以上思路，代码就是手到擒来了。
+
+## 代码
+
+* go
+
+```go
+// 用两个边界方法
+func searchRange(nums []int, target int) []int {
+	// 目标值开始位置：为 target 的左侧边界
+	start := findLeftBound(nums, target)
+	// 如果开始位置越界 或 目标值不存在，直接返回
+	if start == len(nums) || nums[start] != target {
+		return []int{-1,-1}
+	}
+	// 目标值结束位置：为 target 的右侧边界
+	end := findRightBound(nums, target)
+	return []int{start, end}
+}
+
+// 寻找左侧边界的二分查找
+func findLeftBound(nums []int, target int) int {
+	left, right := 0, len(nums)-1 // note: [left, right]
+	for left <= right { // note: 因为 right 是闭区间，所以可以取 =
+		mid := left + ((right - left) >> 1) // mid = (left + right) / 2 的优化形式，防止溢出！
+		if nums[mid] == target {
+			right = mid - 1 // note: 收紧右侧边界以锁定左侧边界
+		}else if nums[mid] < target {
+			left =  mid + 1
+		}else if nums[mid] > target {
+			right = mid - 1
+		}
+	}
+	// 返回左侧边界
+	return left // note
+}
+
+// 寻找右侧边界的二分查找
+func findRightBound(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		mid := left + ((right - left) >> 1)
+		if nums[mid] == target {
+			left = mid + 1
+		}else if nums[mid] < target {
+			left =  mid + 1
+		}else if nums[mid] > target {
+			right = mid - 1
+		}
+	}
+	// 返回右侧边界
+	return right
+}
+```
+
+这样写没有任何问题的，但是左右边界的方法都写了，其实有点冗余，有一个巧妙的方法，可以偷懒只写一个方法即可。
+
+寻找一个数的结束位置，比如寻找 [1,2,4,4,5,6] 中，4 的结束位置，也可以用寻找 4+1 的开始位置 - 1来替代（即寻找 5 的左侧边界再减 1）。
+
+* go
+
+```go
+// 只用一个边界方法
+func searchRange(nums []int, target int) []int {
+	// 目标值开始位置：为目标值的左侧边界，无此值则返回比它大的数的左侧边界
+	start := findLeftBound(nums, target)
+	// 如果开始位置越界 或 目标值不存在，直接返回
+	if start == len(nums) || nums[start] != target {
+		return []int{-1,-1}
+	}
+	// 目标值结束位置：为目标值+1的左侧边界-1，无此值则返回比它大的数的左侧边界-1
+	end := findLeftBound(nums, target+1) - 1
+	return []int{start, end}
+}
+// ... findLeftBound 方法相同，省略
+```
+
+最后提一嘴，像 go 语言是有自己实现的二分查找方法 `sort.Search()`，如果在工作中考虑开发和算法效率，直接用自带的当前方便，但是面试中，我觉得面试官是更希望你能自己实现二分查找算法作为考察的。
+
+* go
+
+```go
+// 用go实现的二分查找方法
+func searchRange(nums []int, target int) []int {
+	// sort.SearchInts 为 go 实现的二分查找
+	start := sort.SearchInts(nums, target)
+	if start == len(nums) || nums[start] != target {
+		return []int{-1, -1}
+	}
+	end := sort.SearchInts(nums, target + 1) - 1
+	return []int{start, end}
+}
+```
+
+------
+
+![](https://pic.leetcode-cn.com/1641874277-bfOQgL-bottomPic.png)
