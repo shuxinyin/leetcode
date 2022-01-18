@@ -49,32 +49,45 @@ class Solution:
         其实我们要找的就是数组中「第一个等于 target的位置」（记为leftIdx）
         和「第一个大于 target的位置减一」（记为rightIdx）。
         '''
-
-        def lower_bound(nums, target):
-            l, r = 0, len(nums) - 1
-            while l < r:
-                mid = (l + r) // 2
-                if nums[mid] >= target:
-                    r = mid
-                else:
-                    l = mid + 1
-            return l
-
-        def upper_bound(nums, target):
-            l, r = 0, len(nums) - 1
-            while l < r:
-                mid = (l + r) // 2
-                if nums[mid] > target:  # upper bound 寻找的第一个大于target的位置
-                    r = mid
-                else:
-                    l = mid + 1
-            return l
-
-        low_bound = lower_bound(nums, target)
-        up_bound = upper_bound(nums, target) - 1
-        if low_bound == len(nums) or nums[low_bound] != target:
+        if len(nums) == 0:
             return [-1, -1]
+
+        first_position = self.find_first_position(nums, target)
+        if first_position == -1:
+            return [-1, -1]
+        last_position = self.find_last_position(nums, target)
+        return [first_position, last_position]
+
+    def find_first_position(self, nums, target):
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = (left + right) // 2
+            if nums[mid] < target:
+                left = mid + 1
+            elif nums[mid] == target:
+                right = mid  # ATTENTION，找左边界，移动right，向左走
+            else:
+                # nums[mid] > target
+                right = mid - 1
+
+        if nums[left] == target:
+            return left
         else:
-            return [low_bound, up_bound]
+            return -1
+
+    def find_last_position(self, nums, target):
+        left, right = 0, len(nums) - 1
+        while left < right:
+            mid = (left + right + 1) // 2
+            if nums[mid] > target:
+                right = mid - 1
+            elif nums[mid] == target:
+                left = mid  # ATTENTION，找右边界，移动left，向右走
+            else:
+                # nums[mid] < target
+                left = mid + 1
+
+        # 由于能走到这里，说明在数组中一定找得到目标元素，因此这里不用再做一次判断
+        return left
 
 # leetcode submit region end(Prohibit modification and deletion)
