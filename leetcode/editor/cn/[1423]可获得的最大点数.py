@@ -57,6 +57,30 @@
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
-    def maxScore(self, cardPoints, k: int) -> int:
-        print()
+    def maxScore(self, cardPoints, k) -> int:
+        '''
+        记数组 cardPoints的长度为 n，
+        由于只能从开头和末尾拿 k 张卡牌，所以最后剩下的必然是连续的 n−k 张卡牌。
+        我们可以通过求出剩余卡牌点数之和的最小值，来求出拿走卡牌点数之和的最大值。
+        '''
+        n = len(cardPoints)
+        windows = n - k
+        s = sum(cardPoints[:n - k])
+        min_sum = s
+        for i in range(n-k, n):
+            s += cardPoints[i] - cardPoints[i - windows]
+            min_sum = min(s, min_sum)
+
+        return sum(cardPoints)-min_sum
+
+
 # leetcode submit region end(Prohibit modification and deletion)
+
+if __name__ == '__main__':
+    S = Solution()
+    l = [1, 2, 3, 4, 5, 6, 1]
+    l = [9, 7, 7, 9, 7, 7, 9]
+    l = [1, 79, 80, 1, 1, 1, 200, 1]
+
+    # l = [2, 2, 2]
+    print(S.maxScore(l, 3))
