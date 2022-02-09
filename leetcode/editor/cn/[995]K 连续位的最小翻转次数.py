@@ -44,9 +44,39 @@
 
 
 # leetcode submit region begin(Prohibit modification and deletion)
+
+
 class Solution:
     def minKBitFlips(self, nums, k):
-        print()
-        
+        '''
+        结论 1：后面区间的翻转，不会影响前面的元素。因此可以使用贪心策略，从左到右遍历，遇到每个 0 都把 它以及后面的 K−1 个元素进行翻转。
+        结论 2：A[i] 翻转偶数次的结果是 A[i]；翻转奇数次的结果是 A[i] ^ 1。
+        用一个队列q存储，当前位置i需要翻转时，则丢进队列q中，此时，i+k-1 则进行了翻转
+           总结：当 A[i] 为 0，如果 i 位置被翻转了偶数次，那么翻转后仍是 0，当前元素需要翻转；
+                当 A[i] 为 1，如果 i 位置被翻转了奇数次，那么翻转后变成 0，当前元素需要翻转。
+        有总结可知  len(que) % 2 == A[i] 时，当前元素需要翻转。队列中元素的个数代表了i被前面 K−1个元素翻转的次数。
+        '''
+        import collections
+
+        N = len(nums)
+        res = 0
+        que = collections.deque()
+
+        for i in range(N - k + 1):
+            # attention 检查当前位置是否超过了窗口大小，往右边滑动
+            if que and i >= que[0] + k:
+                que.popleft()
+            if len(que) % 2 == nums[i]:
+                if i + k > N:
+                    return -1
+                que.append(i)
+                res += 1
+        return res
+
 
 # leetcode submit region end(Prohibit modification and deletion)
+if __name__ == '__main__':
+    A = [0, 0, 0, 1, 0, 1, 1, 0]
+    K = 3
+    S = Solution()
+    print(S.minKBitFlips(A, K))
