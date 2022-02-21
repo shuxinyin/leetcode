@@ -62,7 +62,7 @@ class Solution:
             if nums[mid] == target:
                 return mid
             if nums[0] <= nums[mid]:  # 左边[0:mid],有序
-                if nums[0] <= target < nums[mid]:  # target 只
+                if nums[0] <= target < nums[mid]:  # target 存在于左边[0, mid]
                     r = mid - 1
                 else:
                     l = mid + 1
