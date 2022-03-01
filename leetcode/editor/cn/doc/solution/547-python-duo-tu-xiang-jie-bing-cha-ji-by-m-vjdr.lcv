@@ -1,0 +1,647 @@
+### 前言
+
+连续两天都是并查集的题目，借此题来详细刨析一下
+
+### 基本概念
+
+1. 并查集是一种**数据结构**
+2. 并查集这三个字，一个字代表一个意思。
+3. 并（Union），代表**合并**
+4. 查（Find），代表**查找**
+5. 集（Set），代表这是一个以**字典**为基础的数据结构，它的基本功能是合并集合中的元素，查找集合中的元素
+6. 并查集的典型应用是有关**连通分量**的问题
+7. 并查集解决单个问题（添加，合并，查找）的时间复杂度都是$O(1)$
+8. 因此，并查集可以应用到**在线**算法中
+
+### 并查集的实现
+
+##### 数据结构
+
+并查集跟树有些类似，只不过她跟树是相反的。在树这个数据结构里面，每个节点会记录它的子节点。在并查集里，每个节点会记录它的父节点。
+
+* []
+
+```Python
+class UnionFind:
+
+    def __init__(self):
+        """
+        记录每个节点的父节点
+        """
+        self.father = {}
+
+```
+
+* []
+
+```C++
+class UnionFind{
+private:
+    // 记录父节点
+    unordered_map<int,int> father;
+};
+```
+
+* []
+
+```Java
+class UnionFind {
+    private Map<Integer,Integer> father;
+}
+```
+
+![幻灯片1.JPG](https://pic.leetcode-cn.com/1609980000-ofFjdW-%E5%B9%BB%E7%81%AF%E7%89%871.JPG)
+可以看到，如果节点是相互连通的（从一个节点可以到达另一个节点），那么他们在同一棵树里，或者说在同一个集合里，或者说他们的**祖先是相同的**。
+
+##### 初始化
+
+当把一个新节点添加到并查集中，它的父节点应该为空
+
+* []
+
+```Python
+    def add(self,x):
+        """
+        添加新节点
+        """
+        if x not in self.father:
+            self.father[x] = None
+
+```
+
+* []
+
+```C++
+void add(int x){
+    if(!father.count(x)){
+        father[x] = -1;
+    }
+}
+```
+
+* []
+
+```Java
+public void add(int x) {
+    if (!father.containsKey(x)) {
+        father.put(x, null);
+    }
+}
+```
+
+<![幻灯片2.JPG](https://pic.leetcode-cn.com/1609980044-MZZZkZ-%E5%B9%BB%E7%81%AF%E7%89%872.JPG),![幻灯片3.JPG](https://pic.leetcode-cn.com/1609980051-YjbsFV-%E5%B9%BB%E7%81%AF%E7%89%873.JPG)>
+
+##### 合并两个节点
+
+如果发现两个节点是连通的，那么就要把他们合并，也就是他们的祖先是相同的。这里究竟把谁当做父节点一般是没有区别的。
+
+* []
+
+```Python
+def merge(self,x,y,val):
+    """
+    合并两个节点
+    """
+    root_x,root_y = self.find(x),self.find(y)
+        if root_x != root_y:
+        self.father[root_x] = root_y
+```
+
+* []
+
+```C++
+void merge(int x,int y){
+    int root_x = find(x);
+    int root_y = find(y);
+        if(root_x != root_y){
+        father[root_x] = root_y;
+    }
+}
+```
+
+* []
+
+```Java
+public void merge(int x, int y) {
+    int rootX = find(x);
+    int rootY = find(y);
+        if (rootX != rootY){
+        father.put(rootX,rootY);
+    }
+}
+```
+
+<![幻灯片4.JPG](https://pic.leetcode-cn.com/1609980079-JmfIbX-%E5%B9%BB%E7%81%AF%E7%89%874.JPG),![幻灯片5.JPG](https://pic.leetcode-cn.com/1609980084-xyaszT-%E5%B9%BB%E7%81%AF%E7%89%875.JPG),![幻灯片6.JPG](https://pic.leetcode-cn.com/1609980092-LsNwLc-%E5%B9%BB%E7%81%AF%E7%89%876.JPG)>
+
+##### 两节点是否连通
+
+我们判断两个节点是否处于同一个连通分量的时候，就需要判断它们的祖先是否相同
+
+* []
+
+```Python
+    def is_connected(self,x,y):
+        """
+        判断两节点是否相连
+        """
+        return self.find(x) == self.find(y)
+
+```
+
+* []
+
+```C++
+bool is_connected(int x,int y){
+    return find(x) == find(y);
+}
+```
+
+* []
+
+```Java
+public boolean isConnected(int x, int y) {
+    return find(x) == find(y);
+}
+```
+
+##### 查找祖先
+
+查找祖先的方法是：如果节点的父节点不为空，那就不断迭代。
+
+* []
+
+```Python
+
+    def find(self,x):
+        """
+        查找根节点
+        """
+        root = x
+
+        while self.father[root] != None:
+            root = self.father[root]
+
+        return root
+```
+
+* []
+
+```C++
+int find(int x){
+    int root = x;
+        while(father[root] != -1){
+        root = father[root];
+    }
+        return root;
+}
+```
+
+* []
+
+```Java
+public int find(int x) {
+    int root = x;
+        while(father.get(root) != null){
+        root = father.get(root);
+    }
+         return root;
+}
+```
+
+<![幻灯片7.JPG](https://pic.leetcode-cn.com/1609980128-GpUyoj-%E5%B9%BB%E7%81%AF%E7%89%877.JPG),![幻灯片8.JPG](https://pic.leetcode-cn.com/1609980132-yArlXa-%E5%B9%BB%E7%81%AF%E7%89%878.JPG),![幻灯片9.JPG](https://pic.leetcode-cn.com/1609980142-zBmWAc-%E5%B9%BB%E7%81%AF%E7%89%879.JPG),![幻灯片10.JPG](https://pic.leetcode-cn.com/1609980147-sNIXCO-%E5%B9%BB%E7%81%AF%E7%89%8710.JPG)>
+
+这里有一个优化的点：如果我们树很深，比如说退化成链表，那么每次查询的效率都会非常低。所以我们要做一下路径压缩。也就是把树的深度固定为二。
+
+这么做可行的原因是，并查集只是记录了节点之间的连通关系，而节点相互连通只需要有一个相同的祖先就可以了。
+
+路径压缩可以用递归，也可以迭代。这里用迭代的方法。
+
+<![幻灯片11.JPG](https://pic.leetcode-cn.com/1609980188-XcJBuX-%E5%B9%BB%E7%81%AF%E7%89%8711.JPG),![幻灯片12.JPG](https://pic.leetcode-cn.com/1609980193-bQzhyN-%E5%B9%BB%E7%81%AF%E7%89%8712.JPG),![幻灯片13.JPG](https://pic.leetcode-cn.com/1609980200-XBwEAZ-%E5%B9%BB%E7%81%AF%E7%89%8713.JPG),![幻灯片14.JPG](https://pic.leetcode-cn.com/1609980206-QTmsxl-%E5%B9%BB%E7%81%AF%E7%89%8714.JPG),![幻灯片15.JPG](https://pic.leetcode-cn.com/1609980210-AqLYqN-%E5%B9%BB%E7%81%AF%E7%89%8715.JPG),![幻灯片16.JPG](https://pic.leetcode-cn.com/1609980214-zCosan-%E5%B9%BB%E7%81%AF%E7%89%8716.JPG),![幻灯片17.JPG](https://pic.leetcode-cn.com/1609980217-rmUWsL-%E5%B9%BB%E7%81%AF%E7%89%8717.JPG),![幻灯片18.JPG](https://pic.leetcode-cn.com/1609980221-QejNJu-%E5%B9%BB%E7%81%AF%E7%89%8718.JPG),![幻灯片19.JPG](https://pic.leetcode-cn.com/1609980224-Nladfm-%E5%B9%BB%E7%81%AF%E7%89%8719.JPG),![幻灯片20.JPG](https://pic.leetcode-cn.com/1609980229-kuXoZr-%E5%B9%BB%E7%81%AF%E7%89%8720.JPG),![幻灯片21.JPG](https://pic.leetcode-cn.com/1609980233-EFwRqQ-%E5%B9%BB%E7%81%AF%E7%89%8721.JPG),![幻灯片22.JPG](https://pic.leetcode-cn.com/1609980237-xhFuAA-%E5%B9%BB%E7%81%AF%E7%89%8722.JPG),![幻灯片23.JPG](https://pic.leetcode-cn.com/1609980241-panjuJ-%E5%B9%BB%E7%81%AF%E7%89%8723.JPG),![幻灯片24.JPG](https://pic.leetcode-cn.com/1609980245-kLYmYz-%E5%B9%BB%E7%81%AF%E7%89%8724.JPG)>
+
+* []
+
+```Python
+    def find(self,x):
+        """
+        查找根节点
+        路径压缩
+        """
+        root = x
+
+        while self.father[root] != None:
+            root = self.father[root]
+
+        # 路径压缩
+        while x != root:
+            original_father = self.father[x]
+            self.father[x] = root
+            x = original_father
+         
+        return root
+```
+
+* []
+
+```C++
+int find(int x){
+    int root = x;
+        while(father[root] != -1){
+        root = father[root];
+    }
+        // 路径压缩
+    while(x != root){
+        int original_father = father[x];
+        father[x] = root;
+        x = original_father;
+    }
+        return root;
+}
+```
+
+* []
+
+```Java
+public int find(int x) {
+    int root = x;
+        while(father.get(root) != null){
+        root = father.get(root);
+    }
+        while(x != root){
+        int original_father = father.get(x);
+        father.put(x,root);
+        x = original_father;
+    }
+        return root;
+}
+```
+
+路径压缩的时间复杂度为$O(\log^*n)$
+
+$\log^*n$ 表示 n 取多少次$\log_2n$并向下取整以后 变成 1
+
+可以认为$O(\log^*n) = O(1)$,因为$\log^*2^{65536} = 5$，而$2^{65536}$是一个天文数字。这个时间复杂度当成结论记下就可以。
+
+##### 完整模板
+
+* []
+
+```Python
+class UnionFind:
+    def __init__(self):
+        """
+        记录每个节点的父节点
+        """
+        self.father = {}
+    
+    def find(self,x):
+        """
+        查找根节点
+        路径压缩
+        """
+        root = x
+
+        while self.father[root] != None:
+            root = self.father[root]
+
+        # 路径压缩
+        while x != root:
+            original_father = self.father[x]
+            self.father[x] = root
+            x = original_father
+         
+        return root
+    
+    def merge(self,x,y,val):
+        """
+        合并两个节点
+        """
+        root_x,root_y = self.find(x),self.find(y)
+        
+        if root_x != root_y:
+            self.father[root_x] = root_y
+
+    def is_connected(self,x,y):
+        """
+        判断两节点是否相连
+        """
+        return self.find(x) == self.find(y)
+    
+    def add(self,x):
+        """
+        添加新节点
+        """
+        if x not in self.father:
+            self.father[x] = None
+```
+
+* []
+
+```C++
+class UnionFind{
+public:
+    int find(int x){
+        int root = x;
+        
+        while(father[root] != -1){
+            root = father[root];
+        }
+        
+        while(x != root){
+            int original_father = father[x];
+            father[x] = root;
+            x = original_father;
+        }
+        
+        return root;
+    }
+    
+    bool is_connected(int x,int y){
+        return find(x) == find(y);
+    }
+    
+    void merge(int x,int y){
+        int root_x = find(x);
+        int root_y = find(y);
+        
+        if(root_x != root_y){
+            father[root_x] = root_y;
+        }
+    }
+    
+    void add(int x){
+        if(!father.count(x)){
+            father[x] = -1;
+        }
+    }
+    
+private:
+    // 记录父节点
+    unordered_map<int,int> father;
+};
+```
+
+* []
+
+```Java
+class UnionFind {
+    private Map<Integer,Integer> father;
+    
+    public UnionFind() {
+        father = new HashMap<Integer,Integer>();
+    }
+    
+    public void add(int x) {
+        if (!father.containsKey(x)) {
+            father.put(x, null);
+        }
+    }
+    
+    public void merge(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX != rootY){
+            father.put(rootX,rootY);
+        }
+    }
+    
+    public int find(int x) {
+        int root = x;
+        
+        while(father.get(root) != null){
+            root = father.get(root);
+        }
+        
+        while(x != root){
+            int original_father = father.get(x);
+            father.put(x,root);
+            x = original_father;
+        }
+        
+        return root;
+    }
+    
+    public boolean isConnected(int x, int y) {
+        return find(x) == find(y);
+    }
+} 
+```
+
+以上就是并查集的基本模板，根据不同的题目要求进行对应的添加即可。
+
+### 今天的题目
+
+1. 今天的题目就是在考察连通分量的数目，所以我们要在模板中额外添加一个变量去跟踪集合的数量（有多少棵树）。
+2. 初始化的时候把集合数量加一
+3. 合并的时候让集合数量减一
+
+* []
+
+```Python
+class UnionFind:
+    def __init__(self):
+        self.father = {}
+        # 额外记录集合的数量
+        self.num_of_sets = 0
+    
+    def find(self,x):
+        root = x
+        
+        while self.father[root] != None:
+            root = self.father[root]
+        
+        while x != root:
+            original_father = self.father[x]
+            self.father[x] = root
+            x = original_father
+        
+        return root
+    
+    def merge(self,x,y):
+        root_x,root_y = self.find(x),self.find(y)
+        
+        if root_x != root_y:
+            self.father[root_x] = root_y
+            # 集合的数量-1
+            self.num_of_sets -= 1
+    
+    def add(self,x):
+        if x not in self.father:
+            self.father[x] = None
+            # 集合的数量+1
+            self.num_of_sets += 1
+
+class Solution:
+    def findCircleNum(self, M: List[List[int]]) -> int:
+        uf = UnionFind()
+        for i in range(len(M)):
+            uf.add(i)
+            for j in range(i):
+                if M[i][j]:
+                    uf.merge(i,j)
+        
+        return uf.num_of_sets
+```
+
+* []
+
+```C++
+class UnionFind{
+public:
+    int find(int x){
+        int root = x;
+        
+        while(father[root] != -1){
+            root = father[root];
+        }
+        
+        while(x != root){
+            int original_father = father[x];
+            father[x] = root;
+            x = original_father;
+        }
+        
+        return root;
+    }
+    
+    bool is_connected(int x,int y){
+        return find(x) == find(y);
+    }
+    
+    void merge(int x,int y){
+        int root_x = find(x);
+        int root_y = find(y);
+        
+        if(root_x != root_y){
+            father[root_x] = root_y;
+            num_of_sets--;
+        }
+    }
+    
+    void add(int x){
+        if(!father.count(x)){
+            father[x] = -1;
+            num_of_sets++;
+        }
+    }
+    
+    int get_num_of_sets(){
+        return num_of_sets;
+    }
+    
+private:
+    // 记录父节点
+    unordered_map<int,int> father;
+    // 记录集合数量
+    int num_of_sets = 0;
+};
+
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        UnionFind uf;
+        for(int i = 0;i < isConnected.size();i++){
+            uf.add(i);
+            for(int j = 0;j < i;j++){
+                if(isConnected[i][j]){
+                    uf.merge(i,j);
+                }
+            }
+        }
+        
+        return uf.get_num_of_sets();
+    }
+};
+```
+
+* []
+
+```Java
+class UnionFind {
+    // 记录父节点
+    private Map<Integer,Integer> father;
+    // 记录集合的数量
+    private int numOfSets = 0;
+    
+    public UnionFind() {
+        father = new HashMap<Integer,Integer>();
+        numOfSets = 0;
+    }
+    
+    public void add(int x) {
+        if (!father.containsKey(x)) {
+            father.put(x, null);
+            numOfSets++;
+        }
+    }
+    
+    public void merge(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX != rootY){
+            father.put(rootX,rootY);
+            numOfSets--;
+        }
+    }
+    
+    public int find(int x) {
+        int root = x;
+        
+        while(father.get(root) != null){
+            root = father.get(root);
+        }
+        
+        while(x != root){
+            int original_father = father.get(x);
+            father.put(x,root);
+            x = original_father;
+        }
+        
+        return root;
+    }
+    
+    public boolean isConnected(int x, int y) {
+        return find(x) == find(y);
+    }
+    
+    public int getNumOfSets() {
+        return numOfSets;
+    }
+}
+
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        UnionFind uf = new UnionFind();
+        for(int i = 0;i < isConnected.length;i++){
+            uf.add(i);
+            for(int j = 0;j < i;j++){
+                if(isConnected[i][j] == 1){
+                    uf.merge(i,j);
+                }
+            }
+        }
+        
+        return uf.getNumOfSets();
+    }
+}
+```
+
+### 相关题目
+
+##### 模板题：
+
+1. [以图判树](/problems/graph-valid-tree/)
+2. [无向图中连通分量的数目](/problems/number-of-connected-components-in-an-undirected-graph/)
+
+##### 在线算法：
+
+1. [岛屿数量 II](/problems/number-of-islands-ii/)
+
+##### 其他：
+
+1. [除法求值](/problems/evaluate-division/)
+2. [账户合并](/problems/accounts-merge/)
+3. [打砖块](/problems/bricks-falling-when-hit/)
+4. [矩阵转换后的秩](/problems/rank-transform-of-a-matrix/)
+
