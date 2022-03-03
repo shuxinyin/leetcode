@@ -46,5 +46,6 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def findCircleNum(self, isConnected):
+        print()
 
 # leetcode submit region end(Prohibit modification and deletion)
