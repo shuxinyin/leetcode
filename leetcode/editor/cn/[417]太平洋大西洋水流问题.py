@@ -128,3 +128,5 @@ if __name__ == '__main__':
                [5, 1, 1, 2, 4]]
     res = [[0, 4], [1, 3], [1, 4], [2, 2], [3, 0], [3, 1], [4, 0]]
 
+    S =Solution()
+    print(S.pacificAtlantic(heights))
