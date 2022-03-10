@@ -79,6 +79,7 @@ class Solution(object):
             return components
 
         source, target = get_components()
+        print(source, target)
         queue = collections.deque([(node, 0) for node in source])
         done = set(source)
         while queue:
@@ -92,6 +93,7 @@ class Solution(object):
 
 # leetcode submit region end(Prohibit modification and deletion)
 class Solution2:
+    # easy understand
     def shortestBridge(self, grid):
         from collections import deque
         dir = [(0, 1), (0, -1), (1, 0), (-1, 0)]
@@ -100,6 +102,7 @@ class Solution2:
         q = deque()
         ql = deque()
         i = 0
+        # 找到第一个=1的位置
         while not q:
             for j in range(n):
                 if grid[i][j] == 1:
