@@ -51,8 +51,68 @@
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
-    def solveSudoku(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
+    def solveSudoku(self, board) -> None:
+        def dfs(board, i, j):
+            m, n = 9, 9
+            if j == n:  # 穷举到最后一列则换下一行重新开始
+                dfs(board, i + 1, 0)
+                return
+
+            if i == m:
+                # 找到一个可行解，触发bad case
+                return True
+
+            if board[i][j] != '.':
+                # 如果有预设数字，不⽤我们穷举
+                return dfs(board, i, j + 1)
+
+            for ch in range(1, 10):
+                ch = str(ch)
+                # 遇到不合法的数字，就跳过
+                if (not isValid(board, i, j, ch)):
+                    continue
+                board[i][j] = ch
+                if dfs(board, i, j + 1):
+                    return True
+                board[i][j] = '.'
+            return False  # 穷举完 1~9，依然没有找到可⾏解，此路不通
+
+        # 判断 board[i][j]是否可以填入n
+        def isValid(board, r, c, n):
+            for i in range(3):
+                # 判断行是否重复
+                if board[r][i] == n:
+                    return False
+                # 判断列是否重复
+                if board[i][c] == n:
+                    return False
+                # 判断3*3方框是否重复
+                print((r // 3) * 3 + i // 3, (c // 3) * 3 + i % 3)
+                if board[(r // 3) * 3 + i // 3][(c // 3) * 3 + i % 3] == n:
+                    return False
+            return True
+
+        board1 = [["5", "3", "."],
+                  ["6", ".", "."],
+                  [".", "9", "8"]]
+        res = isValid(board1, 1, 1, '8')
+        print(res)
 # leetcode submit region end(Prohibit modification and deletion)
+
+
+if __name__ == '__main__':
+    board = [["5", "3", ".", ".", "7", ".", ".", ".", "."],
+             ["6", ".", ".", "1", "9", "5", ".", ".", "."],
+             [".", "9", "8", ".", ".", ".", ".", "6", "."],
+             ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
+             ["4", ".", ".", "8", ".", "3", ".", ".", "1"],
+             ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
+             [".", "6", ".", ".", ".", ".", "2", "8", "."],
+             [".", ".", ".", "4", "1", "9", ".", ".", "5"],
+             [".", ".", ".", ".", "8", ".", ".", "7", "9"]]
+
+    board1 = [["5", "3", "."],
+              ["6", ".", "."],
+              [".", "9", "8"]]
+    S = Solution()
+    print(S.solveSudoku(board))
