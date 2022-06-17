@@ -1,5 +1,18 @@
-# 剑指offer-11
+class DoubleDividedPattern:
+    @staticmethod
+    def pattern(target):
+        l, r = 0, len(nums)-1
 
+        while l <= r:
+            mid = l + (r - l) // 2
+            if nums[mid] <= target:
+                l = mid + 1
+            else:
+                r = mid - 1
+        return l  # i永远是大于target的下一个数
+
+
+# 剑指offer-11
 class Solution:
     def minArray(self, numbers: [int]) -> int:
         n = len(numbers)

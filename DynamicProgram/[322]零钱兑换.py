@@ -41,7 +41,7 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def coinChange(self, coins: [int], amount: int) -> int:
-        '''与完全背包类似，完全背包求最大价值，这里求物品个数
+        '''与完全背包类似，完全背包求最大价值，这里求最少物品个数
         二维数组表示：
         状态： dp[i][j]前i种硬币达到金额j的最小硬币数
         转移： dp[i][j] = min(dp[i][j], dp[i][j-coin_i] + 1)
