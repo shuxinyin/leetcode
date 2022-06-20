@@ -45,5 +45,70 @@
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
-    def getMaxLen(self, nums: List[int]) -> int:
+    def getMaxLen(self, nums: [int]) -> int:
+        '''
+        状态： pos[i]表示下标i结尾的乘积为正数的最长子数组长度
+             neg[i]表示下标i结尾乘积为负数的最长子数组长度。
+
+        转移：i>1时：
+                ①. nums[i]>0, 之前的乘积*nums[i]不改变乘积正负性
+                    pos[i] = pos[i-1]+1
+                    neg[i] = neg[i-1] + 1, if neg[i-1]>0
+                    neg[i] = 0, if neg[i-1]=0
+                ②. nums[i]<0, 之前的乘积*nums[i]改变乘积正负性
+                    pos[i] = neg[i-1]+1, if neg[i-1]>0
+                    pos[i] = 0, if neg[i-1]=0
+                    neg[i] = pos[i-1] + 1
+                ③.当 nums[i]=0时，
+                    以下标i结尾的子数组的元素乘积一定为0，因此有 positive[i]=0, negative[i]=0。
+
+        初始状态：i=0: if nums[0] > 0, positive[0] = 1
+                    if nums[0] < 0, negative[0] = 1
+        '''
+        length = len(nums)
+        positive, negative = [0] * length, [0] * length
+        if nums[0] > 0:
+            positive[0] = 1
+        elif nums[0] < 0:
+            negative[0] = 1
+
+        maxLength = positive[0]
+        for i in range(1, length):
+            if nums[i] > 0:
+                positive[i] = positive[i - 1] + 1
+                negative[i] = (negative[i - 1] + 1 if negative[i - 1] > 0 else 0)
+            elif nums[i] < 0:
+                positive[i] = (negative[i - 1] + 1 if negative[i - 1] > 0 else 0)
+                negative[i] = positive[i - 1] + 1
+            else:
+                positive[i] = negative[i] = 0
+            maxLength = max(maxLength, positive[i])
+
+        return maxLength
+
+    def getMaxLen2(self, nums: [int]) -> int:
+        '''
+        滚动数组
+        '''
+        n = len(nums)
+        pos = 1 if nums[0] > 0 else 0
+        neg = 1 if nums[0] < 0 else 0
+
+        max_len = pos
+
+        for i in range(1, n):
+            if nums[i] > 0:
+                pos += 1
+                neg = (neg + 1 if neg > 0 else 0)
+
+            elif nums[i] < 0:
+                new_pos = (neg + 1 if neg > 0 else 0)
+                new_neg = pos + 1
+                pos, neg = new_pos, new_neg
+
+            else:
+                pos = neg = 0
+            max_len = max(max_len, pos)
+        return max_len
+
 # leetcode submit region end(Prohibit modification and deletion)

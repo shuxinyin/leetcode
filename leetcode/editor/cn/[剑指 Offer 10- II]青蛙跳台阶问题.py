@@ -34,4 +34,23 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def numWays(self, n: int) -> int:
+        '''
+        Time: O(log(N)), Space: O(1)
+        f[i]: 表示跳上一个 n 级的台阶总共有f[i]种跳法
+        转移： f[i] = f[i-1] + f[i-2], 最后一阶是跳上一阶 OR 跳上2阶
+        初始状态：f[0] = 1, f[1]=1， f[2]=2
+        example:
+            i=0: {1, 1, 2}
+            i=1: {1, 2, 3}
+            i=2: {2, 3, 5}
+            i=3: {3, 5, 8}
+            上一状态：{a, b, c}, 下一状态：{b, c, b+c}, 此方法可把i=0, i=1, 纳入循环之中，不用单独考虑
+        '''
+
+        a, b, c = 1, 1, 2
+        for i in range(1, n + 1):
+            a = b
+            b = c
+            c = a + b
+        return a % 1000000007
 # leetcode submit region end(Prohibit modification and deletion)
