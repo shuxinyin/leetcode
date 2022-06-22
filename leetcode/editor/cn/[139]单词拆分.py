@@ -44,5 +44,22 @@
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
-    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+    def wordBreak(self, s: str, wordDict: [str]) -> bool:
+        ''' 类似完全背包问题
+        状态： dp[i] 表示s的前i位是否可以用wordDict中的单词表示
+        转移：遍历字符串的所有子串，遍历开始索引 i，遍历区间 [0,n)：
+                遍历结束索引 j，遍历区间 [i+1,n+1)：
+                    if (dp[i] and (s[i:j] in wordDict)):
+                        dp[j]=True
+        初始化 dp[0]=True，空字符可以被表示。
+        '''
+        n = len(s)
+        dp = [False] * (n + 1)
+        dp[0] = True
+        for i in range(n):
+            for j in range(i + 1, n + 1):
+                if (dp[i] and (s[i:j] in wordDict)):
+                    dp[j] = True
+        return dp[-1]
+
 # leetcode submit region end(Prohibit modification and deletion)

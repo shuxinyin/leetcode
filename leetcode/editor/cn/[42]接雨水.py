@@ -34,11 +34,11 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 
 class Solution:
-    '''
+    ''' DoublePointer
     按竖列单个算:（造一个局部凹凸点）：
     左边取一个最大高度max_left, 右边取一个最大高度max_left，单独算每一个竖列位置i能装多少水
     分两种情况：1. max_left <= i <= max_right： 无法接水
-            2. i < max_right，max_left ： 接水量 min(max_left, max_right) - h[i]
+            2. i < min(max_right，max_left) ： 接水量 min(max_left, max_right) - h[i]
     '''
     def trap(self, height):
         # 边界条件

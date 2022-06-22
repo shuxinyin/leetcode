@@ -21,9 +21,7 @@ def n_queens_method1(n):			# n棋盘大小
             # 检查冲突
             ok = True
             for i in range(row):
-                if col == pos[i] 
-                        or col - pos[i] == row - i 
-                        or col - pos[i] == i - row:
+                if col == pos[i] or col - pos[i] == row - i or col - pos[i] == i - row:
                     ok = False
                     break
             if not ok:
@@ -88,9 +86,9 @@ DFS(0)
 >
 > 取反 (not / complement):       ~5 = -6          (~00000101 = 11111010) 
 >
-> 左移 ([shift left](https://www.zhihu.com/search?q=shift+left&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"22846106"})):             5 << 2 = 20      (101 << 2 = 10100) 
+> 左移 :             5 << 2 = 20      (101 << 2 = 10100) 
 >
-> 右移 ([shift right](https://www.zhihu.com/search?q=shift+right&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"22846106"})):            5 >> 2 = 1       (101 >> 2 = 1)
+> 右移:            5 >> 2 = 1       (101 >> 2 = 1)
 
 lowbit操作:
 

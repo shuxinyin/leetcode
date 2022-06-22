@@ -45,7 +45,7 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def maxProfit(self, prices):
-        '''
+        '''只执行n次交易
         「贪心算法」 和 「动态规划」、「回溯搜索」 算法一样，完成一件事情，是 分步决策 的；
         「贪心算法」 在每一步总是做出在当前看来最好的选择，我是这样理解 「最好」 这两个字的意思：
         「最好」 的意思往往根据题目而来，可能是 「最小」，也可能是 「最大」；

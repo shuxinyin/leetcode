@@ -28,4 +28,17 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
+        '''同 53
+        状态：dp[i]表示nums[i]结尾的最大子数组和
+        转移： if nums[i] > 0: dp[i]=dp[i-1] +  nums[i]
+                if nums[i] < 0: dp[i]=dp[i-1]
+        综合起来： dp[i]=max{nums[i],dp[i−1]+nums[i]}
+        初始状态： dp[0]=nums[0]
+        '''
+        n = len(nums)
+        dp = [0] * n
+        dp[0] = nums[0]
+        for i in range(1, n):
+            dp[i] = max(nums[i], dp[i - 1] + nums[i])
+        return max(dp)
 # leetcode submit region end(Prohibit modification and deletion)
