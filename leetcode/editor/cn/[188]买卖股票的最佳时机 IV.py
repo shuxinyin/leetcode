@@ -36,5 +36,38 @@
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
+    def maxProfit(self, k: int, prices: [int]) -> int:
+        '''
+        所以定义状态转移数组dp[天数][当前是否持股][卖出的次数]
+
+        '''
+        n = len(prices)
+        if n < 2:
+            return 0
+
+        # distance = [[[0] * n] * n] * n
+        dp = [[[0 for _ in range(k + 1)] for _ in range(2)] for _ in range(n)]  # (n, 2, k+1)
+
+        # 初始化第一天的交易情况
+        for i in range(k + 1):
+            dp[0][0][i] = 0
+            dp[0][1][i] = -prices[0]
+
+        for i in range(1, n):
+            dp[i][0][0] = 0
+            dp[i][1][0] = max(dp[i - 1][1][0], dp[i - 1][0][0] - prices[i])
+            for j in range(1, k + 1):
+                dp[i][0][j] = max(dp[i - 1][0][j], dp[i - 1][1][j] + prices[i])
+                dp[i][1][j] = max(dp[i - 1][1][j], dp[i - 1][0][j] - prices[i])
+
+        print(dp)
+        return dp[n - 1][0][k]
 # leetcode submit region end(Prohibit modification and deletion)
+
+if __name__ == '__main__':
+    prices = [3, 3, 5, 0, 0, 3, 1, 4]
+    prices = [2, 4, 1]
+    k = 2
+    out = 6
+    S = Solution()
+    print(S.maxProfit(k, prices))
