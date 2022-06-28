@@ -37,7 +37,7 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def maxProfit(self, k: int, prices: [int]) -> int:
-        '''
+        '''只执行有限次交易，k次交易
         所以定义状态转移数组dp[天数][当前是否持股][卖出的次数]
 
         '''

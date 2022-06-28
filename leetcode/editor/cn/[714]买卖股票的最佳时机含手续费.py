@@ -42,4 +42,21 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def maxProfit(self, prices: List[int], fee: int) -> int:
+        ''' 执行最少次交易，达到最大利润
+        这道题「贪心」的地方在于，对于「今天股价-昨天股价」，得到的结果有 3 种可能：① 正数，② 0，③负数。
+            把费用归到buy中， buy = prices[i] + fee， 贪心算法的决策是： 只加正数 。
+        Time: O(N)
+        Space: O(1)
+        '''
+        n = len(prices)
+        buy = prices[0] + fee
+        profit = 0
+
+        for i in range(1, n):
+            if prices[i] + fee < buy:
+                buy = prices[i] + fee
+            elif prices[i] > buy:
+                profit += prices[i] - buy
+                buy = prices[i]
+        return profit
 # leetcode submit region end(Prohibit modification and deletion)

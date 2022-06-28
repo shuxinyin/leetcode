@@ -53,7 +53,7 @@
 # reference: https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/solution/tong-su-yi-dong-de-dong-tai-gui-hua-jie-fa-by-marc/
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        ''' 只执行有限次交易
+        ''' 只执行有限次交易，2次交易
         状态定义：
             由于我们最多可以完成两笔交易，因此在任意一天结束之后，我们会处于以下五个状态中的一种：
             1.未进行过任何操作；
