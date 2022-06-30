@@ -61,5 +61,42 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def numDecodings(self, s: str) -> int:
-        
+        '''
+        状态： dp[i] 表示 以 nums[i] 结尾的子序列的等差数据列个数
+        转移：
+                if s[i] == 0:
+                    # 10 or 20 必须绑定在一起翻译， dp[i] = dp[i - 2]
+                    if s[i - 1] == '1' or s[i - 1] == '2':
+                        dp[i] = dp[i - 2]
+                    else
+                        return 0
+                else
+                    if 10<s[i-1:i] <27:  # 可分开逐个或 在一起翻译
+                        dp[i] = dp[i-2] + dp[i-1]
+                    else:
+                        dp[i] = dp[i-1]  # 必须分开，逐个翻译
+        初始状态：  dp[0] = dp[-1] = 1, (为了把dp)
+        # 由于 dp[i-2]的存在，所以 dp 的长度要 len（s）+1 ，留出 dp[-1] = 1
+        返回： dp[n-1]
+
+        '''
+
+        n = len(s)
+        dp = [1] * (n + 1)
+        dp[0] = dp[-1] = 1
+
+        for i in range(1, n):
+            if s[i] == '0':
+                # 10 or 20 必须绑定在一起翻译， dp[i] = dp[i - 2]
+                if s[i - 1] == '1' or s[i - 1] == '2':
+                    dp[i] = dp[i - 2]
+                else:
+                    return 0
+            else:
+                if '10' < s[i - 1:i+1] < '27':  # 可分开逐个或 在一起翻译
+                    dp[i] = dp[i - 2] + dp[i - 1]
+                else:
+                    dp[i] = dp[i - 1]  # 必须分开，逐个翻译
+        return dp[n-1]
+
 # leetcode submit region end(Prohibit modification and deletion)
