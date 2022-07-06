@@ -34,6 +34,36 @@ class MergeSort():
             return self.merge(left, right)
 
 
+class MergeSort_repeat():
+    def merge(self, left, right):
+
+        res = []
+        i = j = 0
+        while i <= len(left) and j <= len(right):
+            if left[i] <= right[j]:
+                res.append(nums[i])
+                i += 1
+            else:
+                res.append(nums[j])
+                j += 1
+
+        if i == len(left):
+            res += right[j:]
+        else:
+            res += left[i:]
+        return res
+
+    def merge_sort(self, nums):
+        n = len(nums)
+        if n <= 1:
+            return nums
+        mid = n // 2
+        left = self.merge_sort(nums[:mid])
+        right = self.merge_sort(nums[mid:])
+
+        return self.merge(left, right)
+
+
 if __name__ == '__main__':
     nums = [9, 8, 7, 5, 3, 6, 11, 2, 4, 1, 12]
 

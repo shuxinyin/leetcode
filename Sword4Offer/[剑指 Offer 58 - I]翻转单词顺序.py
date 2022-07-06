@@ -37,40 +37,34 @@
 # 
 # 
 #  注意：此题对比原题有改动 
-#  Related Topics 双指针 字符串 👍 217 👎 0
+#  Related Topics 双指针 字符串 👍 222 👎 0
 
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def reverseWords(self, s: str) -> str:
+        '''DoublePointer
+        # 因为需要翻过来，所以倒序
+         例子： "a good   [p1]example[p2]"
+
+        '''
         s = s.strip()
         res = []
         p1 = p2 = len(s) - 1
         while p1 >= 0:
             while p1 >= 0 and s[p1] != ' ':
                 p1 -= 1
-            res.append(s[p1+1:p2+1])
+            res.append(s[p1 + 1:p2 + 1])
             while s[p1] == ' ':
                 p1 -= 1
             p2 = p1
         return ' '.join(res)
 
-        # s = s.strip()
-        # i = j = len(s) - 1
-        # res = []
-        # while i >= 0:
-        #     while i >= 0 and s[i] != ' ':
-        #         i -= 1
-        #     res.append(s[i + 1:j + 1])
-        #     while s[i] == ' ':
-        #         i -= 1
-        #     j = i
-        # return ' '.join(res)
-
 
 # leetcode submit region end(Prohibit modification and deletion)
 
-if __name__ == '__main__':
-    s = "the sky is blue"
+
+if __name__ == "__main__":
+    s = "a good   example"
     S = Solution()
     print(S.reverseWords(s))
