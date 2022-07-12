@@ -49,4 +49,30 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
+        ''' 由于自底向上与自顶向低，结果一样，自底向上只有唯一出口，返回dp[0][0]即可
+        状态： dp[i][j]，走到第i行第j个数时的最小和
+        转移： dp[i][j] = min(dp[i+1][j], dp[i+1][j+1]) + triangle[i][j]  # 根据杨辉三角特征，必定是由（i+1, j+1）或（i+1, j） 走到（i,j）.
+        初始化：dp[i][j] = 0
+        返回： dp[0][0]
+        '''
+        n = len(triangle)
+
+        dp = [[0 for i in range(n + 1)] for j in range(n + 1)]
+
+        for i in range(n - 1, -1, -1):
+            for j in range(0, i + 1):
+                dp[i][j] = min(dp[i + 1][j], dp[i + 1][j + 1]) + triangle[i][j]
+        return dp[0][0]
+# leetcode submit region end(Prohibit modification and deletion)
+
+    def minimumTotal_optimize(self, triangle: List[List[int]]) -> int:
+        # 优化空间 O(n)
+        n = len(triangle)
+
+        dp = [0 for i in range(n + 1)]
+
+        for i in range(n - 1, -1, -1):
+            for j in range(0, i + 1):
+                dp[j] = min(dp[j], dp[j + 1]) + triangle[i][j]
+        return dp[0]
 # leetcode submit region end(Prohibit modification and deletion)

@@ -41,4 +41,20 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        '''
+        状态： dp[i][j]，走到第i行第j个数时的最小和
+        转移： dp[i][j] = min(dp[i-1][j-1], dp[i-1][j] dp[i-1][j+1]) + matrix[i][j]
+        初始化：dp[i][j] = 0
+        返回： dp[0][0]
+        '''
+        m, n =len(matrix), len(matrix[0])
+
+        dp = [[0 for _ in range(n+1)] for _ in range(m+1)]
+
+        for i in range(m):
+            for j in range(n):
+                dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i-1][j+1]) + matrix[i][j]
+        return dp[-1][-1]
+
+
 # leetcode submit region end(Prohibit modification and deletion)

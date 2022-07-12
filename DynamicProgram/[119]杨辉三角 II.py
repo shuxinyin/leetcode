@@ -46,4 +46,18 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def getRow(self, rowIndex: int) -> List[int]:
+        '''
+        状态： dp[i] 表示
+        '''
+        pre = []
+        for i in range(rowIndex + 1):
+            row = []
+            for j in range(i + 1):
+                if j == 0 or j == i:
+                    row.append(1)
+                else:
+                    row.append(pre[j - 1] + pre[j])
+            pre = row
+        return pre
+
 # leetcode submit region end(Prohibit modification and deletion)

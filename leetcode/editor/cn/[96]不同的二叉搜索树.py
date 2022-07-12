@@ -29,5 +29,15 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def numTrees(self, n: int) -> int:
+        '''
+        转移式:  f(i) 为以 i 为根的二叉搜索树的个数，则 C(i)=f(1)+f(2)+f(3)+f(4)+...+f(i)
+                C(i) = C(0)∗C(i−1) + C(1)∗(i−2) +...+ C(i−1)∗C(0)
+        '''
+        dp = [1] * (n + 1)
+        dp[0] = dp[1] = 1
+        for i in range(2, n + 1):
+            for j in range(1, i + 1):
+                dp[i] += dp[j-1] * dp[i - j]
 
+        return dp[-1]
 # leetcode submit region end(Prohibit modification and deletion)
