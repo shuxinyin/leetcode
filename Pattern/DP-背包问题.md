@@ -127,6 +127,25 @@ class Solution:
         return dp[-1]
 ```
 
+377.组合总和 Ⅳ
+# https://leetcode.cn/problems/combination-sum-iv/solution/xi-wang-yong-yi-chong-gui-lu-gao-ding-bei-bao-wen-/
+如果组合问题需考虑元素之间的顺序，需将target放在外循环，将nums放在内循环。
+[1,1,2] , [1, 2, 1] 不同
+
+```python
+class Solution:
+    def combinationSum4(self, nums: [int], target: int) -> int:
+        dp = [0] * (target + 1)
+        dp[0] = 1
+        # 内外循环交换
+        for i in range(1, target + 1):
+            for n in nums:
+                if i >= n:
+                    dp[i] += dp[i - n]
+            # print(dp)
+        return dp[-1]
+```
+
 ### 3. 多重背包
 
 > 背包大小为m, 在n个物品中挑选若干物品，第i个物品的大小为w[i], 价值是v[i],
