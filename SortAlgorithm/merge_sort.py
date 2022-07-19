@@ -1,3 +1,13 @@
+'''
+平均时间复杂度：O(nlogn)
+最佳时间复杂度：O(n)
+最差时间复杂度：O(nlogn)
+空间复杂度：O(n)
+排序方式：In-place
+稳定性：稳定
+'''
+
+
 class MergeSort():
     # 定义合并merge函数
     def merge(self, left_nums, right_nums):

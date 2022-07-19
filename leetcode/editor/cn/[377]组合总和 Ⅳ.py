@@ -65,5 +65,5 @@ class Solution2:
 if __name__ == '__main__':
     nums = [1, 2, 3]
     target = 4
-    S = Solution()
+    S = Solution2()
     print(S.combinationSum4(nums, target))

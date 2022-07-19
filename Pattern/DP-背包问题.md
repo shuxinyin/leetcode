@@ -2,7 +2,7 @@
 
 ### 1. 0-1背包
 
-###### 1.类似的题目:
+###### 1.题目:
 
 > 背包大小为m, 在n个物品中挑选若干物品，第i个物品的大小为w[i], 价值是v[i],
 > 每件物品只能选一次，求解将哪些物品装入背包里物品价值总和最大？   
@@ -75,7 +75,7 @@ def backpack(capacity, weights, values):
     return dp[-1]
 ```
 ###### 1.类似的题目:
-[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)  
 Q: 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。 计算可以凑成总金额所需的 最少的硬币个数
 
 ```python
@@ -103,8 +103,46 @@ class Solution:
                 dp[j] = min(dp[j], dp[j - w]+1)
         return dp[-1] if dp[-1] != float("inf") else -1
 ```
+279.完全平方数  
+Q: 给你一个整数 n ，返回 和为 n 的完全平方数的最少数量.
+> 输入：n = 12 
+> 输出：3   
+> 解释：12 = 4 + 4 + 4 
+```python
+class Solution:
+    def numSquares(self, n: int) -> int:
+        '''
+        状态： dp[i] 表示数字i, 和为 i 的完全平方数的最少数量
+        转移: dp[i] = min(dp[i], dp[i-j*j]+1)
+        '''
+        dp = [0] * (n + 1)
+        for i in range(1, n + 1):
+            # 表示最差情况下的数量，如 i=4，最坏结果为 4=1+1+1+1 即为 4 个数字
+            dp[i] = i
+            j = 1
+            while j * j <= i:
+                dp[i] = min(dp[i], dp[i - j * j] + 1)
+                j += 1
+        return dp[-1]
+```
+279.整数拆分  
+Q: 给定一个正整数 n ，将其拆分为 k 个 正整数 的和（ k >= 2 ），并使这些整数的乘积最大化。 
+> 输入: n = 2
+> 输出: 1  
+> 解释: 2 = 1 + 1, 1 × 1 = 1。
+> 
+```python
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        dp = [0] * (n + 1)
+        for i in range(2, n+1):
+            for j in range(i):
+                dp[i] = max(dp[i], j*(i-j), j*dp[i-j])
+        return dp[n]
 
-[518. 零钱兑换 II](https://leetcode.cn/problems/coin-change-2/)
+```
+
+[518. 零钱兑换 II](https://leetcode.cn/problems/coin-change-2/)  
 Q:给你一个整数数组 coins 表示不同面额的硬币，另给一个整数 amount 表示总金额。 
 计算并返回可以凑成总金额的硬币组合数。如果任何硬币组合都无法凑出总金额，返回 0 。 
 ```python
@@ -127,10 +165,9 @@ class Solution:
         return dp[-1]
 ```
 
-377.组合总和 Ⅳ
-# https://leetcode.cn/problems/combination-sum-iv/solution/xi-wang-yong-yi-chong-gui-lu-gao-ding-bei-bao-wen-/
+[377.组合总和Ⅳ](https://leetcode.cn/problems/combination-sum-iv/solution/xi-wang-yong-yi-chong-gui-lu-gao-ding-bei-bao-wen-/)    
 如果组合问题需考虑元素之间的顺序，需将target放在外循环，将nums放在内循环。
-[1,1,2] , [1, 2, 1] 不同
+> [1,1,2] , [1, 2, 1] 属于不同的组合
 
 ```python
 class Solution:

@@ -1,7 +1,7 @@
 class DoubleDividedPattern:
     @staticmethod
     def pattern(target):
-        l, r = 0, len(nums)-1
+        l, r = 0, len(nums) - 1
 
         while l <= r:
             mid = l + (r - l) // 2
@@ -9,7 +9,7 @@ class DoubleDividedPattern:
                 l = mid + 1
             else:
                 r = mid - 1
-        return l  # i永远是大于target的下一个数
+        return l  # l永远是大于target的下一个数
 
 
 # 剑指offer-11
@@ -32,3 +32,5 @@ class Solution:
 
 if __name__ == '__main__':
     nums = [7, 0, 1, 1, 1, 1, 1, 2, 3, 4]
+    S =Solution()
+    print(S.minArray(nums))
