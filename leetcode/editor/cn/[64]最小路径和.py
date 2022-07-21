@@ -35,4 +35,33 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def minPathSum(self, grid: List[List[int]]) -> int:
+        '''DP
+        状态：dp[i][j]表示到达位置（i, j）的总和。
+        转移：
+            if i == j == 0:  # 初始位置[i][j]
+                dp[i][j] = grid[i][j]
+            elif i==0:  # 第一行dp[i][j]
+                dp[i][j] = dp[i][j - 1] + grid[i][j]
+            elif j==0:  # 第一列dp[i][0]
+                dp[i][j] = dp[i-1][j] + grid[i][j]
+            else:
+                dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j]
+        初始化： dp = [[0 for _ in range(n)] for _ in range(m)]
+        返回： dp[-1][-1]
+        '''
+        m, n = len(grid), len(grid[0])
+
+        dp = [[0 for _ in range(n)] for _ in range(m)]
+
+        for i in range(m):
+            for j in range(n):
+                if i == j == 0:  # 位置[i][j]
+                    dp[i][j] = grid[i][j]
+                elif i==0:  # 第一行dp[i][j]
+                    dp[i][j] = dp[i][j - 1] + grid[i][j]
+                elif j==0:  # 第一列dp[i][0]
+                    dp[i][j] = dp[i-1][j] + grid[i][j]
+                else:
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j]
+        return dp[-1][-1]
 # leetcode submit region end(Prohibit modification and deletion)
