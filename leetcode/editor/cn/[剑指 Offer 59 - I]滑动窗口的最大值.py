@@ -28,4 +28,36 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        ''' 双边队列
+            维持一个长度为k的窗口deque，原则，保持头部head元素最大
+                1. 下一个元素比tail大， 则一直pop，后append
+                2. 同时 判断head是否已经出窗口了
+        '''
+        from collections import deque
+        if not nums or k == 0:
+            return []
+
+        n = len(nums)
+        window = deque()
+        res = []
+
+        # 窗口未形成
+        for i in range(n):
+            while window and nums[i] > window[-1]:
+                window.pop()
+            window.append(nums[i])
+        res.append(window[0])
+
+        # 窗口已结形成
+        for i in range(n):
+            # 判断当前队列最大值head 是否已经出窗口了
+            if window[0] == nums[i-k]:
+                window.popleft()
+
+            while window and nums[i] > window[-1]:
+                window.pop()
+            window.append(nums[i])
+            res.append(window[0])
+        return res
+
 # leetcode submit region end(Prohibit modification and deletion)

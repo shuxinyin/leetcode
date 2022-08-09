@@ -48,24 +48,18 @@
 #  coins 中的所有值 互不相同 
 #  0 <= amount <= 5000 
 #  
-#  Related Topics 数组 动态规划 👍 830 👎 0
+#  Related Topics 数组 动态规划 👍 863 👎 0
 
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
-    def change(self, amount: int, coins: [int]) -> int:
-        '''与完全背包类似，完全背包求最大价值，这里求物品组合方式数量
-        二维数组表示：
-        状态： dp[i][j]前i种硬币达到金额j的组合方式数量
-        转移： dp[i][j] += dp[i][j-coin_i]
-        初始化： dp[0]=1
-
+    def change(self, amount: int, coins: List[int]) -> int:
+        '''与完全背包类似，完全背包求最大价值，这里求物品个数
         一维数组表示：
-        状态： dp[i]达到金额i的组合方式数量
-        转移： dp[i] += dp[i-coin_i]
-        初始状态：dp[0] = 1， 求最大，其他的值初始化0
+        状态： dp[i]达到金额i的硬币组合数
+        转移： dp[i] += dp[i - coin[i]]
+        初始状态：dp[0] = 1，其他的值初始化0
         '''
-
         N = len(coins)
         # 类似完全背包问题
         dp = [0] * (amount + 1)
@@ -75,14 +69,4 @@ class Solution:
             for j in range(w, amount + 1):
                 dp[j] += dp[j - w]
         return dp[-1]
-
-
 # leetcode submit region end(Prohibit modification and deletion)
-
-if __name__ == '__main__':
-    amount = 5
-    coins = [1, 2, 5]
-    S = Solution()
-    print(S.change(amount, coins))
-
-

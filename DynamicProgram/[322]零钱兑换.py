@@ -35,13 +35,13 @@
 #  1 <= coins[i] <= 2³¹ - 1 
 #  0 <= amount <= 10⁴ 
 #  
-#  Related Topics 广度优先搜索 数组 动态规划 👍 1972 👎 0
+#  Related Topics 广度优先搜索 数组 动态规划 👍 2029 👎 0
 
 
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def coinChange(self, coins: [int], amount: int) -> int:
-        '''与完全背包类似，完全背包求最大价值，这里求最少物品个数
+        '''与完全背包类似，完全背包求最大价值，这里求物品个数
         二维数组表示：
         状态： dp[i][j]前i种硬币达到金额j的最小硬币数
         转移： dp[i][j] = min(dp[i][j], dp[i][j-coin_i] + 1)
@@ -64,10 +64,3 @@ class Solution:
         return dp[-1] if dp[-1] != float("inf") else -1
 
 # leetcode submit region end(Prohibit modification and deletion)
-
-
-if __name__ == '__main__':
-    coins = [1, 2, 5]
-    amount = 11
-    S = Solution()
-    print(S.coinChange(coins, amount))

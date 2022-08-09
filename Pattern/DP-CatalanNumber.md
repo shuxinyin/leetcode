@@ -47,3 +47,23 @@ class Solution:
 
         return dp[-1]
 ```
+
+
+```python
+class Solution:
+    def numTrees(self, n: int) -> int:
+        '''
+            C(n) 表示n个节点能组成的不同二叉树的数量
+            f(i) 表示以第i个节点为root点的二叉树数量， 则
+                f(i) = C(0)*C(i-1)  左边0个节点不同二叉树的数量， 右边i-1个节点不同二叉树的数量
+                C(n) = f(1) + f(2) + ...+ f(j) +... + f(n) 
+                     = C(0)*C(n-1) + C(1)*C(n-2) + ...+ f(j-1)f(n-j) +... + C(n-1)C(0) 
+        '''
+        dp_cat = [1] * (n+1)
+    
+        for i in range(2, n + 1):
+            for j in range(1, i):
+                dp_cat = dp_cat[j-1]*dp_cat[n-j]
+    
+        return dp_cat[-1]
+```
