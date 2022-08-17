@@ -32,7 +32,44 @@ def n_queens_method1(n):			# n棋盘大小
             else:
                 pos[row] = col      # 记录当前行皇后的位置
                 DFS(row + 1)
+                # pos[row] = 0  # 因为sol[row]在下一次被写之前不会被读，不要还原
 	DFS(0)
+
+class Solution2:
+    def solveNQueens(self, n: int) -> [[str]]:
+        def generateBoard():
+            board = list()
+            for i in range(n):
+                row[queens[i]] = "Q"
+                board.append("".join(row))
+                row[queens[i]] = "."
+            return board
+
+        def backtrack(row: int):
+            if row == n:
+                board = generateBoard()
+                solutions.append(board)
+            else:
+                for i in range(n):
+                    if i in columns or row - i in diagonal1 or row + i in diagonal2:
+                        continue
+                    queens[row] = i
+                    columns.add(i)
+                    diagonal1.add(row - i)
+                    diagonal2.add(row + i)
+                    backtrack(row + 1)
+                    columns.remove(i)
+                    diagonal1.remove(row - i)
+                    diagonal2.remove(row + i)
+                    
+        solutions = list()
+        queens = [-1] * n
+        columns = set()
+        diagonal1 = set()
+        diagonal2 = set()
+        row = ["."] * n
+        backtrack(0)
+        return solutions
 ```
 
 解法二（空间换时间）：
@@ -44,7 +81,7 @@ def n_queens_method1(n):			# n棋盘大小
 为了明确地指代每一条竖、撇、捺，需要给它们编号。一种编号方式如下图所示。竖一共有 n 条，编号为 0 至 n-1，跟列号相同；撇、捺各有 2n-1 条，编号为 0 至 2n-2。由行列坐标 (row, col) 求撇、捺编号的公式为：
 
 - - 撇编号：row + col
-  - 捺编号：n - 1 - row + col
+- - 捺编号：n - 1 - row + col
 
 - 为什么是这样的编号？因为只有这样编号才能保证处于同一撇或同一捺位置上的点的值相等，代表这些格子处于同一撇或同一捺中，这是一个规律。
 
@@ -96,7 +133,31 @@ lowbit操作:
 >      a = 00110100
 >     ~a = 11001011  # 把 a 取反
 >     -a = 11001100  # 把 a 取反再加 1
-> a & -a = 00000100
+> a & -a = 00000100  # 保留a 中最后一位1
+> a & a-1 = 00110000  # a 中最后一位1置0
 > ```
+
+```python
+n = 13
+shu = pie = na = 0
+count = 0
+
+def DFS(row):
+    global count, shu, pie, na
+    for col in range(n):
+        j = row + col; 
+        k = n - 1 - row + col
+        if ((shu >> col) | (pie >> j) | (na >> k)) & 1:         # 检查冲突
+            continue
+        if row == n - 1:
+            count += 1
+        else:
+            shu ^= (1 << col); pie ^= (1 << j); na ^= (1 << k)  # 标记占用
+            DFS(row + 1)
+            shu ^= (1 << col); pie ^= (1 << j); na ^= (1 << k)  # 清除标记
+
+DFS(0)
+
+```
 
 参考： [N皇后五解](https://www.zhihu.com/search?q=n皇后&utm_content=search_suggestion&type=content)
