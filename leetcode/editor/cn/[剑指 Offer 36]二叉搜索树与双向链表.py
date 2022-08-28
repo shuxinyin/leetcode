@@ -43,5 +43,6 @@ class Node:
 """
 class Solution:
     def treeToDoublyList(self, root: 'Node') -> 'Node':
+        pass
         
 # leetcode submit region end(Prohibit modification and deletion)

@@ -74,8 +74,11 @@ def backpack(capacity, weights, values):
 
     return dp[-1]
 ```
-###### 1.类似的题目:
-[322. 零钱兑换](https://leetcode.cn/problems/coin-change/)  
+
+##### 1.类似的题目:
+
+###### [322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
+
 Q: 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。 计算可以凑成总金额所需的 最少的硬币个数
 
 ```python
@@ -100,14 +103,17 @@ class Solution:
             w = coins[i - 1]
             # 正序遍历，前一个状态表示已经加了i物品，当前是第i个物品不加与加两种状态
             for j in range(w, amount + 1):
-                dp[j] = min(dp[j], dp[j - w]+1)
+                dp[j] = min(dp[j], dp[j - w] + 1)
         return dp[-1] if dp[-1] != float("inf") else -1
 ```
-279.完全平方数  
+
+###### 279.完全平方数
+
 Q: 给你一个整数 n ，返回 和为 n 的完全平方数的最少数量.
-> 输入：n = 12 
+> 输入：n = 12
 > 输出：3   
-> 解释：12 = 4 + 4 + 4 
+> 解释：12 = 4 + 4 + 4
+
 ```python
 class Solution:
     def numSquares(self, n: int) -> int:
@@ -125,8 +131,10 @@ class Solution:
                 j += 1
         return dp[-1]
 ```
-343.整数拆分  
-Q: 给定一个正整数 n ，将其拆分为 k 个 正整数 的和（ k >= 2 ），并使这些整数的乘积最大化。 
+
+###### 343.整数拆分
+
+Q: 给定一个正整数 n ，将其拆分为 k 个 正整数 的和（ k >= 2 ），并使这些整数的乘积最大化。
 > 输入: n = 2
 > 输出: 1  
 > 解释: 2 = 1 + 1, 1 × 1 = 1。
@@ -134,17 +142,28 @@ Q: 给定一个正整数 n ，将其拆分为 k 个 正整数 的和（ k >= 2 �
 ```python
 class Solution:
     def integerBreak(self, n: int) -> int:
-        dp = [0] * (n + 1)
-        for i in range(2, n+1):
-            for j in range(i):
-                dp[i] = max(dp[i], j*(i-j), j*dp[i-j])
-        return dp[n]
+        '''
+        状态： dp[i]表示正整数i 拆分成至少两个正整数的和之后，这些正整数的最大乘积
+        转移： dp = max(dp[i], j * (i - j), j * dp[i - j])
+        - 将 i 拆分成 j 和 i−j的和，且 i−j不再拆分成多个正整数，此时的乘积是 j×(i−j)；
+        - 将 i 拆分成 j 和 i−j的和，且 i−j 继续拆分成多个正整数，此时的乘积是 j×dp[i−j]。
 
+        '''
+        dp = [0] * (n + 1)
+
+        for i in range(1, n + 1):
+            # 存在这种情况： 4 = 1 + 1 + 1 + 1
+            dp[i] = i
+            for j in range(1, i):
+                dp = max(dp[i], j * (i - j), j * dp[i - j])
+            return dp[-1]
 ```
 
-[518. 零钱兑换 II](https://leetcode.cn/problems/coin-change-2/)  
-Q:给你一个整数数组 coins 表示不同面额的硬币，另给一个整数 amount 表示总金额。 
-计算并返回可以凑成总金额的硬币组合数。如果任何硬币组合都无法凑出总金额，返回 0 。 
+###### [518. 零钱兑换 II](https://leetcode.cn/problems/coin-change-2/)
+
+Q:给你一个整数数组 coins 表示不同面额的硬币，另给一个整数 amount 表示总金额。
+计算并返回可以凑成总金额的硬币组合数。如果任何硬币组合都无法凑出总金额，返回 0 。
+
 ```python
 class Solution:
     def change(self, amount: int, coins: [int]) -> int:
@@ -165,8 +184,25 @@ class Solution:
         return dp[-1]
 ```
 
-[377.组合总和Ⅳ](https://leetcode.cn/problems/combination-sum-iv/solution/xi-wang-yong-yi-chong-gui-lu-gao-ding-bei-bao-wen-/)    
-如果组合问题需考虑元素之间的顺序，需将target放在外循环，将nums放在内循环。
+###### [377.组合总和Ⅳ](https://leetcode.cn/problems/combination-sum-iv/solution/xi-wang-yong-yi-chong-gui-lu-gao-ding-bei-bao-wen-/)
+
+> 给你一个由 不同 整数组成的数组 nums ，和一个目标整数 target 。
+> 请你从 nums 中找出并返回总和为 target 的元素组合的个数。
+
+> 示例 1：
+> 输入：nums = [1,2,3], target = 4
+> 输出：7
+> 解释：
+> 所有可能的组合为：
+> (1, 1, 1, 1)
+> (1, 1, 2)
+> (1, 2, 1)
+> (1, 3)
+> (2, 1, 1)
+> (2, 2)
+> (3, 1)
+
+> 如果组合问题需考虑元素之间的顺序，需将target放在外循环，将nums放在内循环。
 > [1,1,2] , [1, 2, 1] 属于不同的组合
 
 ```python
@@ -230,7 +266,9 @@ def backpack(capacity, weights, values, counts):
 ```
 
 ### 总结一下
+
 都可以采用先遍历数组，在遍历背包容量的方法。
+
 1. 0-1背包问题： 采用一维list动态规划时，遍历背包容量采用倒序遍历
 2. 完全背包正序遍历，遍历背包容量采用正序遍历，前一个状态表示已经加了i物品，当前是第i个物品不加与加两种状态
 3. 多重背包可转化为0-1背包问题，也就是选取k个物品

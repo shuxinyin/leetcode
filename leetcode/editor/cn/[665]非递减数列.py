@@ -36,7 +36,7 @@ class Solution(object):
     def checkPossibility(self, nums):
         """
         当 nums[i] 破坏了数组的单调递增时，即 nums[i] < nums[i - 1] 时，为了让数组有序，我们发现一个规律（在上面三个例子中， nums[i] 都为 2， nums[i -1] 都为 4）：
-
+        动前不动后
         如例【4，2，5】的情况，当 i = 1 ，那么修改 num[i- 1] ，不要动 nums[i] ，因为nums[i]后面的元素是啥我们还不知道呢，少动它为妙。
         如例【1，4，2，5】的情况，当 i > 1 时，我们应该优先考虑把 nums[i - 1] 调小到 >= nums[i - 2] 并且 <= nums[i]。同样尽量不去修改 nums[i] ，理由同上。
         如例【3，4，2，5】的情况，当 i > 1 且 nums[i] < nums[i - 2] 时，我们无法调整 nums[i - 1] ，我们只能调整 nums[i] 到 nums[i - 1] 。
