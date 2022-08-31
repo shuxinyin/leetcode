@@ -26,32 +26,45 @@
 
 ```python
 class Solution:
-    def strStr(self, haystack: str, needle: str) -> int:
-        a = len(needle)
-        b = len(haystack)
-        if a == 0:
+    def strStr(self, text: str, pattern: str) -> int:
+        '''
+        next： 为前缀表，采用的是前后缀最长相等位置长度 - 1
+        j: text后缀组末尾, 逐个匹配
+        p: pattern末尾
+        1. 初始化 2.前后缀不相同 3.前后缀相同  4.get_next
+        '''
+        len_pattern = len(pattern)
+        len_text = len(text)
+        if len_pattern == 0:
             return 0
-        next = self.getnext(a, needle)
+        next = self.getnext(pattern)
+        print(next)
         p = -1
-        for j in range(b):
-            while p >= 0 and needle[p + 1] != haystack[j]:
+        for j in range(len_text):
+            while p >= 0 and pattern[p + 1] != text[j]:
                 p = next[p]
-            if needle[p + 1] == haystack[j]:
+            if pattern[p + 1] == text[j]:
                 p += 1
-            if p == a - 1:
-                return j - a + 1
+            if p == len_pattern - 1:
+                return j - len_pattern + 1
         return -1
 
-    def getnext(self, a, needle):
-        next = ['' for i in range(a)]
-        k = -1
-        next[0] = k
-        for i in range(1, len(needle)):
-            while (k > -1 and needle[k + 1] != needle[i]):
-                k = next[k]
-            if needle[k + 1] == needle[i]:
-                k += 1
-            next[i] = k
+    def getnext(self, pattern):
+        '''
+        next： 为前缀表，采用的是前后缀最长相等位置长度 - 1
+        j: 前缀组末尾
+        i: 后缀组末尾
+        1. 初始化 2.前后缀不相同 3.前后缀相同  4.get_next
+        '''
+        next = ['' for i in range(len(pattern))]
+        j = -1  # 就是看冲突位置的下标即可
+        next[0] = j
+        for i in range(1, len(pattern)):
+            while j > -1 and pattern[j + 1] != pattern[i]:
+                # 不匹配，回退到冲突位置的下标指示位置，继续匹配
+                j = next[j]
+            if pattern[j + 1] == pattern[i]:
+                j += 1
+            next[i] = j
         return next
-
 ```
