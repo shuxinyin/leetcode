@@ -7,8 +7,8 @@
 思路很清楚，采用一个数组记录每一行皇后放的位置，例如pos[2] =5, 代表第 2 行的皇后放在第 5 列。在试探下一个位置的皇后时，需与上面已经放好的皇后检查是否冲突。例如试探位置为（row, col）, 而而第 i 行已经有一个皇后放置在 (i, pos[i]),则需要从这三个方面进行检查，查看是否冲突。
 
 1. 是否位于同一列： col = pos[i]
-2. 是否位于右上到左下的斜线上（称为撇斜线）： col - pos[i] == row - i
-3. 是否位于右上到左下的斜线上（称为捺斜线）： col - pos[i] == i - row
+2. 是否位于右上到左下的斜线上（称为撇斜线）： col - pos[i] == i - row
+3. 是否位于右上到左下的斜线上（称为捺斜线）： col - pos[i] == row - i
 
 ```python
 def n_queens_method1(n):			# n棋盘大小
@@ -17,10 +17,10 @@ def n_queens_method1(n):			# n棋盘大小
 
     def DFS(row):                   # 递归函数，试探第 row 行皇后的位置
         global count
-        for col in range(n):        # 依次试探每一列
+        for col in range(n):        # 依次试探每一列， 每个位置
             # 检查冲突
             ok = True
-            for i in range(row):
+            for i in range(row):    # 检查前面row行中的每一行是否有冲突
                 if col == pos[i] or col - pos[i] == row - i or col - pos[i] == i - row:
                     ok = False
                     break
@@ -34,7 +34,9 @@ def n_queens_method1(n):			# n棋盘大小
                 DFS(row + 1)
                 # pos[row] = 0  # 因为sol[row]在下一次被写之前不会被读，不要还原
 	DFS(0)
+```
 
+```python
 class Solution2:
     def solveNQueens(self, n: int) -> [[str]]:
         def generateBoard():

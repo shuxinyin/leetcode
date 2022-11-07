@@ -6,6 +6,7 @@
 剑指 Offer 09. 用两个栈实现队列
 剑指 Offer 30. 包含min函数的栈
 
+剑指 Offer 29. 顺时针打印矩阵
 剑指 Offer 31. 栈的压入、弹出序列
 
 ### 队列， 双边队列
@@ -34,25 +35,32 @@ class Solution:
                 1. 下一个元素比tail大， 则一直pop，后append
                 2. 同时 判断head是否已经出窗口了
         '''
-        if not nums or k == 0: return []
-        deque = collections.deque()
-        # 未形成窗口
-        for i in range(k):
-            while deque and deque[-1] < nums[i]:
-                deque.pop()
-            deque.append(nums[i])
-        res = [deque[0]]
-        # 形成窗口后
-        for i in range(k, len(nums)):
-            # 判断队列头 最大值  是否已经出窗口了
-            if deque[0] == nums[i - k]:
-                deque.popleft()
-            while deque and deque[-1] < nums[i]:
-                deque.pop()
-            deque.append(nums[i])
-            res.append(deque[0])
-        return res
+        from collections import deque
+        if not nums or k == 0:
+            return []
 
+        n = len(nums)
+        window = deque()
+        res = []
+
+        # 窗口未形成
+        for i in range(n):
+            while window and nums[i] > window[-1]:
+                window.pop()
+            window.append(nums[i])
+        res.append(window[0])
+
+        # 窗口已结形成
+        for i in range(n):
+            # 判断当前队列最大值head 是否已经出窗口了
+            if window[0] == nums[i - k]:
+                window.popleft()
+
+            while window and nums[i] > window[-1]:
+                window.pop()
+            window.append(nums[i])
+            res.append(window[0])
+        return res
 ```
 
 #### 剑指 Offer 59 - II. 队列的最大值
@@ -167,6 +175,51 @@ class MinStack:
         return self.stack2[-1]
 ```
 
+#### 剑指 Offer 29. 顺时针打印矩阵
+>  输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。 
+>  示例 1： 
+>  输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+>  输出：[1,2,3,6,9,8,7,4,5]
+
+```python
+class Solution:
+    def spiralOrder(self, matrix: [[int]]) -> [int]:
+        ''' 从左向右、从上向下、从右向左、从下向上
+        设置4个边界，left, right, top, bottom
+        '''
+        if not matrix:
+            return []
+
+        l, r, t, b = 0, len(matrix[0]) - 1, 0, len(matrix) - 1
+        res = []
+        while True:
+            for i in range(l, r + 1):
+                res.append(matrix[t][i])  # left to right
+            t += 1
+            if t > b:
+                break
+                
+            for i in range(t, b + 1):
+                res.append(matrix[i][r])  # top to bottom
+            r -= 1
+            if l > r:
+                break
+                
+            for i in range(r, l - 1, -1):
+                res.append(matrix[b][i])  # right to left
+            b -= 1
+            if t > b:
+                break
+                
+            for i in range(b, t - 1, -1):
+                res.append(matrix[i][l])  # bottom to top
+            l += 1
+            if l > r:
+                break
+        return res
+```
+
+
 #### 剑指 Offer 31. 栈的压入、弹出序列
 Q: 输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。
     例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。 
@@ -187,5 +240,5 @@ class Solution:
                 stack.pop()
                 i += 1
         return not stack
-
 ```
+

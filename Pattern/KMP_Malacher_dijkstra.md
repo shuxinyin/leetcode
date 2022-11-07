@@ -7,8 +7,14 @@
 
 #### KMP算法
 主要是要计算前缀部分匹配表(Partial Match Table)的数组， 也称为next数组；  
-表示在s[i：j]子串中，前缀与后缀完全匹配的最大长度
-![PMT](img.png)
+表示在s[:i]子串中，前缀与后缀完全匹配的**公共**最大长度  
+![PMT](img.png)  
+>  "前缀"指除了最后一个字符以外，一个字符串的全部头部组合；"后缀"指除了第一个字符以外，一个字符串的全部尾部组合。  
+> 例如：ababa    
+> 前缀： a, ab, aba, abab  
+> 后缀： baba, aba, ba, a  
+> 最长公共长度： aba
+
 
 #### 题目
 ##### 28-实现 strStr()
@@ -48,6 +54,7 @@ class Solution:
             if p == len_pattern - 1:
                 return j - len_pattern + 1
         return -1
+
 
     def getnext(self, pattern):
         '''

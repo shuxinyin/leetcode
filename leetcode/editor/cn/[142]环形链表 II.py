@@ -66,6 +66,7 @@
 class Solution(object):
     def detectCycle(self, head):
         '''
+        假设 x为 头-环入口 的节点数， y为 环入口-相遇点 的节点数  z为 相遇点-环入口 的节点数
         第一次相遇时：
         slow指针走过的节点数为: x + y,fast指针走过的节点数： x + y + n (y + z)，n为圈数，（y+z）为 一圈内节点的个数
         因为fast指针是一步走两个节点，slow指针一步走一个节点， 所以 fast指针走过的节点数 = slow指针走过的节点数 * 2

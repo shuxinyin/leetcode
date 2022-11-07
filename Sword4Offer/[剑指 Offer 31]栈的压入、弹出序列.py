@@ -36,4 +36,15 @@
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        '''
+            pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+        '''
+
+        stack, i = [], 0
+        for num in pushed:
+            stack.append(num)
+            while stack and stack[-1] == popped[i]:  # 判断出栈
+                stack.pop()
+                i += 1
+        return not stack
 # leetcode submit region end(Prohibit modification and deletion)

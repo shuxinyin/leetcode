@@ -27,20 +27,20 @@ Q: 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都�
 class Solution:
     def rob(self, nums: List[int]) -> int:
         '''
-            状态：dp[i]表示以nums[i]结尾的子数组最高金额
+            状态：dp[i]表示以下标为i-1的nums结尾的子数组最高金额
             转移：dp[i] = max(dp[i-2]+nums[i], dp[i-1])
+                抢劫第 i-1 间屋子，根据规则，则 第 i - 1号屋子我们是不能抢的，此时我们的收益是 dp[i - 2] + nums[i-1]
+                不抢劫第 i 间屋子，那么此时我们的收益就等于 dp[i - 1]
             初始化： dp[0]=nums[0]
         '''
-        n = len(nums)
-        dp = [0] * n
-        dp[0] = nums[0]
-        for i in range(n):
-            dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
-
+        size = len(nums)
+        dp = [0] * (size + 1)
+        dp[1] = nums[0]
+        for i in range(2, size + 1):
+            dp[i] = max(dp[i - 2] + nums[i - 1], dp[i - 1])
         return dp[-1]
-
-
 ```
+
 
 #### 213.打家劫舍II
 
@@ -182,7 +182,7 @@ Q: 给你一个非负整数数组 nums ，你最初位于数组的第一个位�
 class Solution:
     def jump(self, nums: List[int]) -> int:
         ''' 两个变量：end maxPos 
-            # maxPos：当前能到的最远位置
+            # maxPos：当前（前i步中）能到的最远位置
             # end：上一步时，能到的最远位置
             # step：步数
         '''
@@ -312,3 +312,38 @@ Q: 给你一个 m x n 的矩阵，其中的值均为非负整数，代表二维�
 > 输出: 4
 > 解释: 下雨后，雨水将会被上图蓝色的方块中。总的接雨水量为1+2+1=4。
 
+```python
+class Solution:
+    def trapRainWater(self, heightMap: [[int]]) -> int:
+        ''' 优先队列 + DFS
+            队列存最外层元素, 保持pop最小v(小顶堆)
+             创建visited(表示是否已经灌水过)  DFS搜索v邻居点，进行灌水
+        '''
+        import heapq
+        r, c = len(heightMap), len(heightMap[0])
+        visited = [[0 for _ in range(c)] for _ in range(r)]
+
+        pq = []
+        for i in range(r):
+            for j in range(c):
+                if i == 0 or i == r - 1 or j == 0 or j == c - 1:
+                    heapq.heappush(pq, (heightMap[i][j], i, j))
+                    visited[i][j] = 1
+        print(len(pq), pq)
+
+        res = 0
+        dirs = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+        while pq:
+            h, x, y = heapq.heappop(pq)
+            for (i, j) in dirs:
+                cur_x, cur_y = x + i, y + j
+
+                if 0 <= cur_x and cur_x < r and 0 <= cur_y and cur_y < c and visited[cur_x][cur_y] == 0:
+                    tmp = h - heightMap[cur_x][cur_y]
+                    if tmp > 0:
+                        # print(heightMap[cur_x][cur_y], cur_x, cur_y)
+                        res += tmp
+                    visited[cur_x][cur_y] = 1
+                    heapq.heappush(pq, (max(h, heightMap[cur_x][cur_y]), cur_x, cur_y))
+        return res
+```

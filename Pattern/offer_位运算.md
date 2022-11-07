@@ -13,6 +13,10 @@
 > 非~：换位取反
 > 异或^: 相同为0， 不同为1
 
+
+> 异或运算：x ^ 0 = x​ ， x ^ 1 = ~x
+> 与运算：x & 0 = 0 ， x & 1 = x
+
 #### [剑指 Offer 15]二进制中1的个数
 
 Q: 编写一个函数，输入是一个无符号整数（以二进制串的形式），返回其二进制表达式中数字位数为 '1' 的个数（也被称为 汉明重量).）。
@@ -101,16 +105,38 @@ class Solution:
         return x, y
 ```
 
-#### ?? [剑指 Offer 56 - II]数组中数字出现的次数 II
+#### [剑指 Offer 56 - II]数组中数字出现的次数 II
 
 Q: 在一个数组 nums 中除一个数字只出现一次之外，其他数字都出现了三次。请找出那个只出现一次的数字。
 
 > 输入：nums = [9,1,7,9,7,9,7]
 > 输出：1
 
+
 ```python
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
+        ''' 统计32位中  每个位置上1 的个数
+            依次对32位每个位置上取余， 余下来则是那个只出现一次的数字。
+        '''
+        counts = [0] * 32
+        for num in nums:
+            for j in range(32):
+                counts[j] += num & 1
+                num >>= 1
+
+        res, m = 0, 3
+        for i in range(32):
+            res <<= 1
+            res |= counts[31 - i] % m
+        return res if counts[31] % m == 0 else ~(res ^ 0xffffffff)
+
+class Solution2:
+    def singleNumber(self, nums: List[int]) -> int:
+        ''' 状态机
+        由于二进制只能表示 0, 10,1 ，因此需要使用两个二进制位来表示 33 个状态。设此两位分别为 two, one，则状态转换变为：
+            00 → 01 → 10 → 00 → ⋯
+        '''
         ones = 0  # 每个数的状态的二进制的个位
         two = 0  # 每个数的状态的二进制的十位
         for num in nums:

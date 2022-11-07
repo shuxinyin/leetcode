@@ -121,13 +121,13 @@ class Solution:
         n = len(intervals)
         count = 0
         end = intervals[0][1]
-        for i in range(n - 1):
+        for i in range(1, n):
             #  下一个区间 head < 尾 有重叠
             if intervals[i][0] < end:
                 count += 1
-                end = max(intervals[i][1], end)
+                end = min(intervals[i][1], end)
             else:
-                end = max(intervals[i][1], end)
+                end = intervals[i][1]
         return count
 ```
 
@@ -215,9 +215,10 @@ class Solution:
             if flowerbed[i] == 0:
                 if i == length - 1 or flowerbed[i + 1] == 0:
                     n -= 1
-                i += 2  # 是1就跳两格
-            else:
-                i += 1
+                else:
+                    i += 1
+            i += 2  # 是1就跳两格
+
         return n <= 0     
 ```
 
@@ -325,11 +326,13 @@ class Solution(object):
         Space O(1)
         """
         n = len(nums)
+        count = 0
         for i in range(1, n):
             if nums[i]< nums[i-1]:
+                count += 1
                 if i==1 or nums[i] >= nums[i-2]:
-                    nums[i-1] = nums[i-1]
+                    nums[i-1] = nums[i]
                 else:
                     nums[i] = nums[i-1]
-        return nums      
+        return count <= 1      
 ```

@@ -155,7 +155,7 @@ class Solution:
             # 存在这种情况： 4 = 1 + 1 + 1 + 1
             dp[i] = i
             for j in range(1, i):
-                dp = max(dp[i], j * (i - j), j * dp[i - j])
+                dp[i] = max(dp[i], j * (i - j), j * dp[i - j])
             return dp[-1]
 ```
 

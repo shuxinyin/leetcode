@@ -133,6 +133,7 @@ class Solution:
 
 ```
 
+
 ### 303-区域和检索-数组不可变
 
 Q: (一维) # 给定一个整数数组 nums，处理以下类型的多个查询: 计算索引 left 和 right （包含 left 和 right）之间的 nums 元素的 和 ，其中 left <= right.
@@ -199,8 +200,18 @@ class NumMatrix:
 
 ```
 
-### 
-# 前缀问题  1292  https://www.bilibili.com/video/BV19J41147jQ?spm_id_from=333.337.search-card.all.click
+
+
+# 前缀问题  [1292]元素和小于等于阈值的正方形的最大边长
+> https://www.bilibili.com/video/BV19J41147jQ?spm_id_from=333.337.search-card.all.click
+
+> 给你一个大小为 m x n 的矩阵 mat 和一个整数阈值 threshold。  
+>  请你返回元素总和小于或等于阈值的正方形区域的最大边长；如果没有这样的正方形区域，则返回 0 。 
+>  示例 1： 
+> 输入：mat = [[1,1,3,2,4,3,2],[1,1,3,2,4,3,2],[1,1,3,2,4,3,2]], threshold = 4
+> 输出：2
+> 解释：总和小于或等于 4 的正方形的最大边长为 2，如图所示。
+
 ```python
 class Solution:
     def matrixBlockSum(self, mat: [[int]], threshold: int) -> [[int]]:
