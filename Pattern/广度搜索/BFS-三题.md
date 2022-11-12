@@ -1,10 +1,10 @@
 ## BFS-广度优先搜索
 
-126-单词接龙
-127-单词接龙II
+127-单词接龙
+126-单词接龙II
 934-最短的桥
 
-### 126-单词接龙
+### 127-单词接龙
 Q: # 按字典 wordList 完成从单词 beginWord 到单词 endWord 转化，一个表示此过程的 转换序列 是形式上像 beginWord -> s1 -> s2 -> ... -> sk 这样的单词序列，
 并满足： 每对相邻的单词之间仅有单个字母不同。 转换过程中的每个单词 si（1 <= i <= k）必须是字典 wordList 中的单词。注意，beginWord 不必是字典 wordList 中的单词。 
 **输出最短序列的长度**。
@@ -68,10 +68,60 @@ class Solution:
                     word_list[j] = origin_char  # 恢复
             step += 1
         return 0
-
 ```
 
-### 127-单词接龙II
+Solution 2: 双向扩展
+```python
+def ladderLength(self, beginWord: str, endWord: str, wordList: [str]) -> int:
+        word_set = set(wordList)
+        if len(word_set) == 0 or endWord not in word_set:
+            return 0
+
+        if beginWord in word_set:
+            word_set.remove(beginWord)
+
+        visited = set()
+        visited.add(beginWord)
+        visited.add(endWord)
+
+        begin_visited = set()
+        begin_visited.add(beginWord)
+
+        end_visited = set()
+        end_visited.add(endWord)
+
+        word_len = len(beginWord)
+        step = 1
+        # 简化成 while begin_visited 亦可
+        while begin_visited and end_visited:
+            # 打开帮助调试
+            # print(begin_visited)
+            # print(end_visited)
+
+            if len(begin_visited) > len(end_visited):
+                begin_visited, end_visited = end_visited, begin_visited
+
+            next_level_visited = set()
+            for word in begin_visited:
+                word_list = list(word)
+
+                for j in range(word_len):
+                    origin_char = word_list[j]
+                    for k in range(26):
+                        word_list[j] = chr(ord('a') + k)
+                        next_word = ''.join(word_list)
+                        if next_word in word_set:
+                            if next_word in end_visited:  # difference
+                                return step + 1
+                            if next_word not in visited:
+                                next_level_visited.add(next_word)
+                                visited.add(next_word)
+                    word_list[j] = origin_char
+            begin_visited = next_level_visited
+            step += 1
+        return 0
+```
+### 126-单词接龙II
 
 Q:  按字典 wordList 完成从单词 beginWord 到单词 endWord 转化，一个表示此过程的 转换序列 是形式上像 beginWord -> s1 -> s2 -> ... -> sk 这样的单词序列，
 并满足： 每对相邻的单词之间仅有单个字母不同。 转换过程中的每个单词 si（1 <= i <= k）必须是字典 wordList 中的单词。注意，beginWord 不必是字典 wordList 中的单词。 

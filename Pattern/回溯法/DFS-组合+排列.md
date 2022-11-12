@@ -10,6 +10,9 @@
 46.全排列
 47.全排列II
 
+> 关于什么时候用visited 数组， 什么时候用begin变量。
+> 1.排列问题， 讲究顺序（即[1,2,1]与[1,1,2]为不同列表时），需要记录哪些数字已经使用过，需要用visited
+> 2.组合问题， 不讲究顺序（即[1,2,1]与[1,1,2]为相同列表时），需要按照某种顺序搜索，此时用begin变量
 
 #### 剑指 Offer 38. 字符串的排列
 Q: 输入一个字符串，打印出该字符串中字符的所有排列。 里面不能有重复元素。
@@ -38,7 +41,7 @@ class Solution:
 
             # 重排（不再选自己）,用visited控制
             for i in range(n):
-                # 访问过 或 （不是第一个数 & 不重复 & 上一个访问（因为有重复））
+                # 访问过 或 （不是第一个数 & 不重复 & 上一个访问（因为有重复， 树层上去重））
                 if visited[i] or (i>0 and nums[i]==nums[i-1] and not visited[i-1]):
                     continue
 
@@ -47,7 +50,7 @@ class Solution:
                 dfs(tmp_list, len(tmp_list))
                 visited[i] = 0
 
-        helper([], 0)
+        dfs([], 0)
         return res
 ```
 
@@ -61,6 +64,7 @@ Q:  给你一个 无重复元素 的整数数组 candidates 和一个目标整�
 
 
 ```python
+class Solution:
     def combinationSum(self, candidates, target):
         ''' 1. 可重复选自己
         '''
@@ -78,10 +82,10 @@ Q:  给你一个 无重复元素 的整数数组 candidates 和一个目标整�
                 dfs(i, size, path + [candidates[i]], target-candidates[i])
         
         size = len(candidates)
-        if size = 0:
+        if size == 0:
             return res
         path = []
-        dfs(candidates, 0, size, path, target)
+        dfs(0, size, path, target)
         return res
 
 ```
@@ -106,19 +110,19 @@ class Solution:
             2.避免在同一层中使用相同的元素: 同等大小的数字下，如[2，2，2]，执行的是第一个2
         '''
         res = []
-        def dfs(cand, path, target):
-            if targe < 0:
+        def dfs(cand, path, tar):
+            if tar < 0:
                 return 
             
-            if target == 0:
+            if tar == 0:
                 res.append(path)
                 return 
 
             n = len(cand)
             for i in range(n):  # 排序完之后避免在同一层中使用相同的元素
                 # tar小于下一个数或(i不是第一个数且前后数相等)时，跳过不执行搜索句，其他条件都执行
-                if target>=cand[i] and not (i > 0 and cand[i] == cand[i-1]):
-                    dfs(cand[i+1:], path + [candidates[i]], target-candidates[i])
+                if tar>=cand[i] and not (i > 0 and cand[i] == cand[i-1]):
+                    dfs(cand[i+1:], path + [candidates[i]], tar-candidates[i])
         
         candidates.sort()
         path = []
@@ -133,8 +137,22 @@ Q: 给你一个整数数组 nums ，**数组中的元素 互不相同** 。返�
 > 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 
 ```python
+
+        
 class Solution:
     def subsets(self, nums):
+        n = len(nums)
+        res = []
+        
+        def dfs(begin, size, tmp):
+            res.append(tmp)
+            for j in range(begin, size):
+                dfs(j+1, size, tmp + [nums[j]])
+        dfs(0, n, [])
+        return res
+                
+                
+    def subsets2(self, nums):
         '''1. 不重复选自己
         '''
         res = []
@@ -150,18 +168,6 @@ class Solution:
         path = []
         dfs(nums, path)
         return res
-
-    def subsets2(self, nums):
-        res = []
-        n = len(nums)
-
-        def dfs(i, n, tmp):
-            res.append(tmp)
-            for j in range(i, n):
-                dfs(j + 1, n, tmp + [nums[j]])
-
-        helper(0, n, [])
-        return res
 ```
 
 #### 78-子集II
@@ -172,12 +178,12 @@ Q:  给你一个整数数组 nums ，其中**可能包含重复元素**，请你
 >  输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]
 
 ```python
-class Solution(object):
+class Solution:
     def subsetsWithDup(self, nums):
         '''1. 不重复选自己
             2. 避免在同一层中使用相同的元素
         '''
-        
+        n = len(nums)
         res = []
         def dfs(i, n, path):
             res.append(path)
@@ -202,20 +208,26 @@ Q: 给定一个**不含重复数字**的数组 nums ，返回其 所有可能的
 ```python
 class Solution(object):
     def permute(self, nums):
-        ''' 1. 不重复选自己
-        '''
+        n = len(nums)
+        if not n:
+            return
         res = []
-        def dfs(start, size, path):
-            if len(path) == size:
-                res.append(path)
+        visited = [0] * n
 
-            for j in range(start, size):
-                dfs(j+1, size, path + [nums[j]])
-        
-        path = []
-        dfs(0, len(nums), path)
+        def dfs(tmp):
+            if len(tmp) == n:
+                res.append(list(tmp))
+                return
+
+            for i in range(n):
+                if visited[i]:
+                    continue
+                visited[i] = 1
+                dfs(tmp+[nums[i]])
+                visited[i] = 0
+
+        dfs([])
         return res
-
 ```
 
 #### 46.全排列II
@@ -226,26 +238,8 @@ Q:  给定一个可**包含重复数字**的序列 nums ，按任意顺序 返�
 
 ```python
 class Solution():
+
     def permuteUnique(self, nums):
-        '''1. 不重复选自己
-            2. 同层间不选相同的数字
-        '''
-        res = []
-        nums.sort()
-        def dfs(start, size, path):
-            if len(path) == size:
-                res.append(path)
-
-            for i in range(start, size):
-                if i>0  and nums[i] == nums[i-1]:
-                    continue
-                dfs(i+1, size, path+[nums[i]])
-        
-        path = []
-        dfs(0, len(nums), path)
-        return res
-
-    def permuteUnique2(self, nums):
         if not nums:
             return
 
