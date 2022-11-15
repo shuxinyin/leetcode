@@ -33,12 +33,31 @@
 
 # leetcode submit region begin(Prohibit modification and deletion)
 # Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+
+from typing import List
+
 
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        # 前序列： 中左右， 中序：左中右
+        index = {k: v for k, v in enumerate(inorder)}
+
+        def build(pre_left, pre_right, in_left, in_right):
+            inorder_root = index[preorder[pre_left]]
+            sub_len = inorder_root - in_left
+
+            root = TreeNode(preorder[pre_left])
+
+            root.left = build(pre_left + 1, pre_left + sub_len, in_left, inorder_root - 1)
+            root.right = build(pre_left + sub_len + 1, pre_right, inorder_root + 1, in_right)
+            return root
+
+        n = len(preorder)
+        return build(0, n - 1, 0, n - 1)
 # leetcode submit region end(Prohibit modification and deletion)

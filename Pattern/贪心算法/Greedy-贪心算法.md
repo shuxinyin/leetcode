@@ -5,11 +5,14 @@
 
 435. 无重叠区间
 452. 用最少数量的箭引爆气球
+56. 合并区间
 
 605. 种花
 763. 划分字母区间
 406. 根据身高重建队列
 665. 非递减数列
+
+
 
 #### 455. 分配饼干
 
@@ -48,7 +51,7 @@ class Solution:
                 ind1 += 1
                 ind2 += 1
             else:
-                ind += 1
+                ind2 += 1
 
         return res
 ```
@@ -191,7 +194,28 @@ class Solution:
 
         return count
 ```
+#### 56. 合并区间
 
+> 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。
+> 请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+>  示例 1： 
+> 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+> 输出：[[1,6],[8,10],[15,18]]
+> 解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+
+```python
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals = sorted(intervals, key=lambda x: x[0])
+
+        merge = []
+        for inter in intervals:
+            if not merge or merge[-1][1] < inter[0]:
+                merge.append(inter)
+            else:
+                merge[-1][1] = max(merge[-1][1], inter[1])  # 存在[(1, 3), (1, 2)]
+        return merge
+```
 #### 605. 种花
 
 > 假设有一个很长的花坛，一部分地块种植了花，另一部分却没有。可是，花不能种植在相邻的地块上，它们会争夺水源，两者都会死去。

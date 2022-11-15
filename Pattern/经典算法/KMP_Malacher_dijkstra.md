@@ -30,15 +30,33 @@
 > 输入：haystack = "hello", needle = "ll"
 > 输出：2
 
+暴力解法
+```python
+def subStr(text, pattern):
+    len_text = len(text)
+    len_pattern = len(pattern)
+    i, j = 0, 0
+    while i< len_text:
+        if text[i] == pattern[j]:
+            i += 1
+            j += 1
+        else:
+            i = i - j + 1
+            j = 0
+        if j == len(pattern):   # 匹配成功
+            return i - j + 1
+    return -1
+```
+
 ```python
 class Solution:
     def strStr(self, text: str, pattern: str) -> int:
-        '''
+        """
         next： 为前缀表，采用的是前后缀最长相等位置长度 - 1
         j: text后缀组末尾, 逐个匹配
         p: pattern末尾
         1. 初始化 2.前后缀不相同 3.前后缀相同  4.get_next
-        '''
+        """
         len_pattern = len(pattern)
         len_text = len(text)
         if len_pattern == 0:
